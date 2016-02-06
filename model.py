@@ -4,13 +4,37 @@
 初始化数据库
 '''
 import model_oper_bz
-from peewee import TextField, IntegerField
+from peewee import TextField, IntegerField, BooleanField, DateTimeField
 from playhouse.postgres_ext import JSONField
 #import user_bz
 import public_bz
 
 project_name = public_bz.getProjectName()
 db_name = project_name
+
+import ConfigParser
+config = ConfigParser.ConfigParser()
+with open('conf/db.ini', 'r') as cfg_file:
+    config.readfp(cfg_file)
+    host = config.get('db', 'host')
+    port = config.get('db', 'port')
+    the_db = config.get('db', 'db')
+    user = config.get('db', 'user')
+    pw = config.get('db', 'pw')
+
+
+class wechat_dead_line(model_oper_bz.base):
+
+    '''
+    记录wechat的超时时间,以决定要不要新建
+    modify by bigzhu at 15/09/13 17:49:27 加入对wechat_ext的支持
+    '''
+    jsapi_ticket = TextField(null=True)
+    jsapi_ticket_expires_at = DateTimeField(null=True)
+    access_token = TextField(null=True)
+    access_token_expires_at = DateTimeField(null=True)
+    token = TextField(null=True)
+    cookies = TextField(null=True)
 
 
 class wechat_user(model_oper_bz.base):
@@ -54,13 +78,13 @@ class hits(model_oper_bz.base):
 
 
 if __name__ == '__main__':
-    import user_bz
-    user_bz.createTable(db_name)
+    #import user_bz
+    # user_bz.createTable(db_name)
     # 需要用户登录模块
-    #user_bz.createTable(db_name)
+    # user_bz.createTable(db_name)
     #model_oper_bz.dropTable(hits, db_name)
     #model_oper_bz.createTable(hits, db_name)
     #model_oper_bz.dropTable(upload_info, db_name)
     #model_oper_bz.dropTable(vote, db_name)
     #model_oper_bz.dropTable(hits, db_name)
-    model_oper_bz.createAllTable(globals(), db_name)
+    model_oper_bz.createAllTable(globals(), db_name, user=user, password=pw, host=host)
