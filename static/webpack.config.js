@@ -3,7 +3,6 @@ module.exports = {
   devtool: 'source-map',
   entry: {
         app: "./app.coffee",
-        header: "./header.coffee",
   	},
   output: {
   		path: path.join(__dirname, "build"),
