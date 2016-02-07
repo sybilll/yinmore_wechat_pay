@@ -68,6 +68,7 @@ class bird(BaseHandler):
         self.set_secure_cookie("openid", str(openid))
         self.redirect(url)
 
+
 class app(BaseHandler):
 
     '''
@@ -75,9 +76,9 @@ class app(BaseHandler):
     '''
 
     #@wechat_bz.mustSubscribe
+
     def get(self):
         self.render(tornado_bz.getTName(self))
-
 
 
 class callback(BaseHandler):
@@ -140,6 +141,7 @@ class callback(BaseHandler):
             response = wechat.response_text(content=u'地理位置信息')
         elif isinstance(message, EventMessage):  # 事件信息
             if message.type == 'subscribe':  # 关注事件(包括普通关注事件和扫描二维码造成的关注事件)
+                print message.source
                 if message.key and message.ticket:  # 如果 key 和 ticket 均不为空，则是扫描二维码造成的关注事件
                     response = wechat.response_text(content=u'用户尚未关注时的二维码扫描关注事件')
                 else:
