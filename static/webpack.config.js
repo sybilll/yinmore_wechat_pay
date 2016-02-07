@@ -3,8 +3,6 @@ module.exports = {
   devtool: 'source-map',
   entry: {
         app: "./app.coffee",
-        login: "./login.coffee",
-        users: "./users.coffee",
         header: "./header.coffee",
   	},
   output: {

@@ -20,6 +20,6 @@
     "semantic-ui": "^2.1.7",
     "style-loader": "^0.12.3",
     "vue": "^1.0.8",
-    "vue-router": "vuejs/vue-router"
+    "vue-router": "github:vuejs/vue-router"
   }
 }

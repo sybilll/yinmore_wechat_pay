@@ -29,6 +29,19 @@ with open('conf/wechat.ini', 'r') as cfg_file:
     encoding_aes_key = config.get('app', 'encoding_aes_key')
 
 
+def addWechatUser(openid):
+    '''
+    create by bigzhu at 15/04/08 21:07:54 检查用户是否存储了,没有的话存之
+    '''
+    wechat_user_info = public_db.getWechatUserByOpenid(openid)
+    if wechat_user_info:
+        pass
+    else:
+        wechat = getWechat()
+        wechat_user_info = wechat.get_user_info(openid)
+        pg.db.insert('wechat_user', **wechat_user_info)
+
+
 def sendArticle(openid, articles):
     '''
     发送信息 create by bigzhu at 15/07/24 09:35:31
