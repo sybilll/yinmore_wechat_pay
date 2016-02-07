@@ -64,7 +64,7 @@ def getNewWechatInfo():
         token=token,
         appid=appid,
         appsecret=appsecret,
-        encrypt_mode='safe',
+        encrypt_mode='compatible',
         encoding_aes_key=encoding_aes_key
     )
     wechat = WechatBasic(conf=conf)
@@ -94,7 +94,7 @@ def getWechat():
                 token=token,
                 appid=appid,
                 appsecret=appsecret,
-                encrypt_mode='safe',
+                encrypt_mode='compatible',
                 encoding_aes_key=encoding_aes_key,
                 jsapi_ticket=wechat_dead_line.jsapi_ticket,
                 jsapi_ticket_expires_at=time_bz.datetimeToTimestamp(wechat_dead_line.jsapi_ticket_expires_at),
