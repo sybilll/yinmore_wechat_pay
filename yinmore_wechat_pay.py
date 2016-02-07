@@ -93,7 +93,7 @@ class callback(BaseHandler):
     def post(self):
         self.set_header("Content-Type", "application/json")
 
-        wechat = self.wechat
+        wechat = wechat_oper.getWechat()
 
         wechat.parse_data(self.request.body)
         message = wechat.get_message()
