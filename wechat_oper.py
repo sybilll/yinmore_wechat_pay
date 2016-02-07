@@ -238,4 +238,4 @@ def sendInstagram(openid, text, img_url, user_name, id):
     articles = [article]
     sendArticle(openid, articles)
 if __name__ == '__main__':
-    print getWechatExt()
+    print getNewWechatInfo()
