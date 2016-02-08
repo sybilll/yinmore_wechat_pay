@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # sys.setdefaultencoding() does not exist, here!
-import json
+#import json
 #import public_bz
 import sys
 #import time
@@ -19,7 +19,7 @@ from tornado_bz import BaseHandler
 import pg
 import public_db
 #import proxy
-#import web_bz
+import web_bz
 try:
     #    from wechat_sdk import WechatBasic
     from wechat_sdk.messages import (
@@ -37,36 +37,8 @@ sys.setdefaultencoding('utf-8')
 OK = '0'
 
 
-class bird(BaseHandler):
-
-    """
-    微信获取不到openid时, 访问获取信息的页面后的回调页面
-    """
-
-    def get(self, parm):
-        print 'call setOpenId'
-        url = self.get_argument('url')
-        code = self.get_argument('code')
-        user_access_token = wechat_bz.getUserAccessToken(code, self.settings["appid"], self.settings["appsecret"])
-
-        openid = user_access_token.get("openid")
-        if openid is None:
-            print json.dumps(user_access_token)
-            print 'code= %s url=%s' % (code, url)
-
-            error = '''
-            <html>
-                <script type="text/javascript">
-                alert("微信服务器异常，请关闭后，重新打开");
-                WeixinJSBridge.call('closeWindow');
-                </script>
-            </html>
-            '''
-            self.write(error)
-            return
-
-        self.set_secure_cookie("openid", str(openid))
-        self.redirect(url)
+class set_openid(web_bz.set_openid):
+    pass
 
 
 class app(BaseHandler):
@@ -75,8 +47,7 @@ class app(BaseHandler):
     主程序
     '''
 
-    #@wechat_bz.mustSubscribe
-
+    @wechat_bz.mustSubscribe
     def get(self):
         self.render(tornado_bz.getTName(self))
 
@@ -180,7 +151,9 @@ if __name__ == "__main__":
 
     settings = tornado_bz.getSettings()
     settings["pg"] = pg
-    #settings, wechat = wechat_oper.initSetting(settings)
+    settings["domain"] = 'yinmore.follow.center'
+    settings["appid"] = wechat_oper.appid
+
     application = tornado.web.Application(url_map, **settings)
 
     application.listen(port)
