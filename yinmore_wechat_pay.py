@@ -153,6 +153,7 @@ if __name__ == "__main__":
     settings["pg"] = pg
     settings["domain"] = 'yinmore.follow.center'
     settings["appid"] = wechat_oper.appid
+    settings["appsecret"] = wechat_oper.appsecret
 
     application = tornado.web.Application(url_map, **settings)
 
