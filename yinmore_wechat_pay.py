@@ -49,6 +49,8 @@ class app(BaseHandler):
 
     @wechat_bz.mustSubscribe
     def get(self):
+        openid = self.get_secure_cookie("openid")
+        print openid
         self.render(tornado_bz.getTName(self))
 
 
