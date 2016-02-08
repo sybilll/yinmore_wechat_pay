@@ -154,6 +154,7 @@ if __name__ == "__main__":
     settings["domain"] = 'yinmore.follow.center'
     settings["appid"] = wechat_oper.appid
     settings["appsecret"] = wechat_oper.appsecret
+    settings["wechat"] = wechat_oper.getWechat()
 
     application = tornado.web.Application(url_map, **settings)
 
