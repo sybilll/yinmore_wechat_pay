@@ -41,9 +41,9 @@ module.exports =
               'appId': prepay.appid
               'timeStamp': prepay.timestamp
               'nonceStr': prepay.nonce_str
-              'package': "prepay_id=#{prepay.prepay_id}"
+              'package': prepay.package
               'signType': 'MD5'
-              'paySign': prepay.sign
+              'paySign': prepay.paySign
             }
             alert JSON.stringify(weixin_parm)
             WeixinJSBridge.invoke 'getBrandWCPayRequest', weixin_parm, (res) ->

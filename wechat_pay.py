@@ -59,6 +59,7 @@ class WeiXinPay():
             'notify_url': notify_url,
             'openid': openid
         }
+        print self.params
 
         self.url = 'https://api.mch.weixin.qq.com/pay/unifiedorder'  # 微信请求url
         self.error = None
@@ -182,5 +183,7 @@ class WeiXinResponse(WeiXinPay):
         return True
 
 if __name__ == '__main__':
-    weixin_pay = WeiXinPay(order_id=586947, body='test', total_fee='1', nonce_str='123456', spbill_create_ip='8.8.8.8')
-    weixin_pay.get_prepay_id()
+    weixin_pay = WeiXinPay(out_trade_no='b2', body='test', total_fee='100',
+                           spbill_create_ip='8.8.8.8', openid='oGXiIwHwx_zB8ekXibYjdt3Xb_fE')
+
+    print weixin_pay.get_prepay_id()
