@@ -64,11 +64,11 @@ class bind_card_info(model_oper_bz.base):
     绑定的油卡信息 create by bigzhu at 16/02/09 00:42:55
     '''
     card_number = TextField()  # 加油卡卡号
-    car_number = TextField()  # 车牌号
-    car_type = TextField()  # 车型
-    phone_number = TextField()  # 手机号
-    name = TextField()  # 姓名
-    id_number = TextField()  # 身份证号
+    car_number = TextField(null=True)  # 车牌号
+    car_type = TextField(null=True)  # 车型
+    phone_number = TextField(null=True)  # 手机号
+    name = TextField(null=True)  # 姓名
+    id_number = TextField(null=True)  # 身份证号
     openid = TextField()  # wechat openid
 
 

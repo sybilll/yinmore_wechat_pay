@@ -55,7 +55,9 @@ class save_wechat_bind_info(BaseHandler):
         data = json.loads(self.request.body)
 
         openid = self.get_secure_cookie("openid")
-        where = "openid='%s' and card_id='%s' " % openid, data['card_id']
+        openid = 123
+        data['openid'] = openid
+        where = "openid='%s' and card_number='%s' " % (openid, data['card_number'])
         id = db_bz.insertOrUpdate(pg, 'bind_card_info', data, where)
 
         self.write(json.dumps({'error': '0'}))

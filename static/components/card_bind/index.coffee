@@ -3,9 +3,9 @@ error = require 'lib/functions/error.coffee'
 toast = require 'lib/functions/toast.coffee'
 top_toast = toast.getTopRightToast()
 
-
 module.exports =
   data:->
+    card_number_error:false
     bind_info:
       name=''
     loading: false
@@ -29,8 +29,11 @@ module.exports =
       if @disable_edit
         @enable()
       else
-        @loading=false
-        @disable()
+        @loading=true
+        if not @bind_info.card_number
+          @card_number_error=true
+          top_toast.warning "必须填入加油卡卡号"
+          return
         parm = JSON.stringify
           card_number:@bind_info.card_number
           car_number:@bind_info.car_number
@@ -38,12 +41,18 @@ module.exports =
           phone_number:@bind_info.phone_number
           name:@bind_info.name
           id_number:@bind_info.id_number
+        console.log parm
         $.ajax
           url: '/save_wechat_bind_info'
           type: 'POST'
           data : parm
           success: (data, status, response) =>
+            @loading=false
             if data.error != '0'
               throw new Error(data.error)
             else
+              @disable()
               top_toast["info"] "保存成功"
+    cleanError:->
+      @card_number_error=false
+      @loading = false

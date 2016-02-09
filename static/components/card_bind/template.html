@@ -1,9 +1,9 @@
 <div class="ui piled center aligned segment">
     <h4 class="ui header">(%bind_info.name%)</h4>
     <form class="ui form">
-        <div class="field">
+        <div v-bind:class="{ 'error': card_number_error }" class="field">
             <label>加油卡卡号</label>
-            <input v-model="bind_info.card_number" v-disable="disable_edit" type="text"  placeholder="加油卡卡号">
+            <input @focus="cleanError" v-model="bind_info.card_number"  v-disable="disable_edit" type="number"  placeholder="加油卡卡号">
         </div>
         <div class="field">
             <label>持卡人</label>
@@ -27,9 +27,8 @@
             <input v-model="bind_info.id_number" v-disable="disable_edit" type="text"  placeholder="身份证号">
         </div>
     </form>
-
     <div class="ui center aligned basic segment">
-        <button @click="save" class="ui basic button">
+        <button @click="save" v-bind:class="{ 'disabled': loading, 'loading': loading }"class="ui basic button">
             <i class="icon file text"></i>
             编辑
         </button>
