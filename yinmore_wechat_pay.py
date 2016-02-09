@@ -52,8 +52,11 @@ class get_wechat_prepay_id(BaseHandler):
 
         data = json.loads(self.request.body)
         total_fee = data['total_fee']
+        card_number = data['card_number']
 
-        weixin_pay = WeiXinPay(out_trade_no='x2', body='英茂油卡冲值:%s' % total_fee, total_fee=total_fee,
+        out_trade_no = pg.db.insert('pay', openid=openid, total_fee=total_fee, card_number=card_number)
+
+        weixin_pay = WeiXinPay(out_trade_no=out_trade_no, body='英茂油卡冲值:%s' % total_fee, total_fee=total_fee,
                                spbill_create_ip=remote_ip, openid=openid)
 
         prepay = weixin_pay.re_finall()

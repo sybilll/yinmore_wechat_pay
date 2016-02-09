@@ -24,7 +24,9 @@ module.exports =
         top_toast.warning "充负数是不可以的"
         return
       parm = JSON.stringify
-        total_fee:@total_fee
+        total_fee:@total_fee*100 #后台单位是分
+        card_number:'数据要传递过来'
+
       $.ajax
         url: '/get_wechat_prepay_id'
         type: 'POST'
