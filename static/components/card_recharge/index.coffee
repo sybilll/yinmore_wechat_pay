@@ -54,4 +54,3 @@ module.exports =
     cleanError:->
       @total_fee_error=false
       @loading = false
-

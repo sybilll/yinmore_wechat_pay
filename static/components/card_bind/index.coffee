@@ -26,8 +26,9 @@ module.exports =
           if data.error != '0'
             throw new Error(data.error)
           else
-            @bind_info = data.data
-            if ! @bind_info
+            if data.data
+              @bind_info = data.data
+            else
               @enable()
     enable:->
         @disable_edit = false
