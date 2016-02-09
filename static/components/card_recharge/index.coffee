@@ -38,11 +38,11 @@ module.exports =
           else
             prepay = data.data
             weixin_parm = {
-              'appId': prepay.appid
-              'timeStamp': prepay.timestamp
-              'nonceStr': prepay.nonce_str
+              'appId': prepay.appId
+              'timeStamp': prepay.timeStamp
+              'nonceStr': prepay.nonceStr
               'package': prepay.package
-              'signType': 'MD5'
+              'signType': prepay.signType
               'paySign': prepay.paySign
             }
             alert JSON.stringify(weixin_parm)
