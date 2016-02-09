@@ -45,7 +45,7 @@ module.exports =
               'signType': 'MD5'
               'paySign': prepay.sign
             }
-            #alert JSON.stringify(weixin_parm)
+            alert JSON.stringify(weixin_parm)
             WeixinJSBridge.invoke 'getBrandWCPayRequest', weixin_parm, (res) ->
               if res.err_msg == 'get_brand_wcpay_request：ok'
                 alert '充值成功'
