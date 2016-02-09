@@ -27,4 +27,10 @@
             </div>
         </div>
     </form>
+    <form class="ui form">
+        <div v-bind:class="{ 'error': card_number_error }" class="field">
+            <label>加油卡卡号</label>
+            <input @focus="cleanError"   v-disable="disable_edit" type="number"  placeholder="加油卡卡号">
+        </div>
+    </form>
 </div>
