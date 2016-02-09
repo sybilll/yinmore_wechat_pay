@@ -41,7 +41,7 @@ module.exports =
               'appId': prepay.appid
               'timeStamp': prepay.timestamp
               'nonceStr': prepay.nonce_str
-              'package': prepay.package
+              'package': "prepay_id=#{prepay.prepay_id}"
               'signType': 'MD5'
               'paySign': prepay.sign
             }, (res) ->
