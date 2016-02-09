@@ -47,7 +47,7 @@ class get_wechat_prepay_id(BaseHandler):
     def post(self):
         self.set_header("Content-Type", "application/json")
         openid = self.get_secure_cookie("openid")
-        openid = 'oGXiIwHwx_zB8ekXibYjdt3Xb_fE'
+        #openid = 'oGXiIwHwx_zB8ekXibYjdt3Xb_fE'
         remote_ip = self.request.remote_ip
 
         data = json.loads(self.request.body)
@@ -69,7 +69,7 @@ class get_wechat_bind_info(BaseHandler):
     def post(self):
         self.set_header("Content-Type", "application/json")
         openid = self.get_secure_cookie("openid")
-        openid = 123
+        #openid = 123
         bind_info = public_db.getBindInfoByOpenid(openid)
         if bind_info:
             bind_info = bind_info[0]
@@ -88,7 +88,7 @@ class save_wechat_bind_info(BaseHandler):
         data = json.loads(self.request.body)
 
         openid = self.get_secure_cookie("openid")
-        openid = 123
+        #openid = 123
         data['openid'] = openid
         #where = "openid='%s' and card_number='%s' " % (openid, data['card_number'])
         where = "openid='%s' " % openid
@@ -107,7 +107,7 @@ class app(BaseHandler):
     主程序
     '''
 
-    #@wechat_bz.mustSubscribe
+    @wechat_bz.mustSubscribe
 
     def get(self):
         #openid = self.get_secure_cookie("openid")
