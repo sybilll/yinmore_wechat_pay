@@ -43,7 +43,13 @@ class get_wechat_bind_info(BaseHandler):
     def post(self):
         self.set_header("Content-Type", "application/json")
         openid = self.get_secure_cookie("openid")
+        openid = 123
         bind_info = public_db.getBindInfoByOpenid(openid)
+        if bind_info:
+            bind_info = bind_info[0]
+        else:
+            bind_info=None
+
         self.write(json.dumps({'error': '0', 'data': bind_info}, cls=public_bz.ExtEncoder))
 
 class save_wechat_bind_info(BaseHandler):

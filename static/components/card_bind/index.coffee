@@ -16,9 +16,20 @@ module.exports =
   template: require('./template.html')
   ready:->
     error.setOnErrorVm(@)
-    if ! @bind_info.card_number
-      @enable()
+    @getBindInfo()
   methods:
+    getBindInfo:->
+      $.ajax
+        url: '/get_wechat_bind_info'
+        type: 'POST'
+        success: (data, status, response) =>
+          if data.error != '0'
+            throw new Error(data.error)
+          else
+            @bind_info = data.data
+            console.log data
+            if ! @bind_info.card_number
+              @enable()
     enable:->
         @disable_edit = false
         $(@$el).find(".basic.button").html('<i class="icon save"></i>保存')
