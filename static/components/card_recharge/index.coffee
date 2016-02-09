@@ -39,7 +39,7 @@ module.exports =
             prepay = data.data
             weixin_parm = {
               'appId': prepay.appid
-              'timeStamp': prepay.timestamp
+              'timeStamp': "#{prepay.timestamp}"
               'nonceStr': prepay.nonce_str
               'package': "prepay_id=#{prepay.prepay_id}"
               'signType': 'MD5'
