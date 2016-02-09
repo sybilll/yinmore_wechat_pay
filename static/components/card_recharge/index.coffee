@@ -38,20 +38,19 @@ module.exports =
           else
             prepay = data.data
             weixin_parm = {
-              'appid': prepay.appid
-              'noncestr': prepay.nonce_str
-              'package': prepay.package
-              'partnerid':prepay.partnerid
-              'timestamp': "#{prepay.timestamp}"
-              'prepayid':prepay.prepay_id
-              'sign': prepay.sign
+              'appId': prepay.appid
+              'timeStamp': prepay.timestamp
+              'nonceStr': prepay.nonce_str
+              'package': "prepay_id=#{prepay.prepay_id}"
+              'signType': 'MD5'
+              'paySign': prepay.sign
             }
-            alert JSON.stringify(weixin_parm)
+            #alert JSON.stringify(weixin_parm)
             WeixinJSBridge.invoke 'getBrandWCPayRequest', weixin_parm, (res) ->
               if res.err_msg == 'get_brand_wcpay_request：ok'
                 alert '充值成功'
               else
-                alert res.err_msg
+                alert(res.err_code + res.err_desc + res.err_msg)
               # 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。 
               return
             #wx.chooseWXPay
