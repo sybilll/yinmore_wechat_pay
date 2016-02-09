@@ -88,7 +88,8 @@ class WeiXinPay():
         #print("stringSignTemp ==> %s" % stringSignTemp)
         sign = (md5(stringSignTemp).hexdigest()).upper()
         params['sign'] = sign
-        print("==> %s" % sign)
+        return sign
+        #print("==> %s" % sign)
 
     def get_req_xml(self):
         """拼接XML
@@ -125,16 +126,14 @@ class WeiXinPay():
         xml_json = json.loads(xml2json(r.text.encode('utf8'), options))['xml']
 
         r_params = {}
-        r_params['prepay_id'] = xml_json['prepay_id']
-        r_params['appid'] = xml_json['appid']
-        r_params['mch_id'] = xml_json['mch_id']
-        r_params['nonce_str'] = xml_json['nonce_str']
-        r_params['sign'] = xml_json['sign']
-        r_params['prepay_id'] = xml_json['prepay_id']
-
-        r_params['paySign'] = xml_json['sign']
+        r_params['appId'] = xml_json['appid']
+        r_params['timeStamp'] = str(int(time.time()))
+        nonce_str = ''.join(map(lambda xx: (hex(ord(xx))[2:]), os.urandom(16)))
+        r_params['nonceStr'] = nonce_str
         r_params['package'] = 'prepay_id=%s' % xml_json['prepay_id']
-        r_params['timestamp'] = str(int(time.time()))
+        r_params['signType'] = 'MD5'
+
+        r_params['paySign'] = self.get_sign(r_params)
 
 
         #self.params['prepay_id'] = prepay_id
