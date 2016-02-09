@@ -47,7 +47,6 @@ class WeiXinPay():
 
         # 生生随机字符
         nonce_str = ''.join(map(lambda xx: (hex(ord(xx))[2:]), os.urandom(16)))
-        #nonce_str = '1a9e98d596467ce78fd58c94f143e16'
         self.params = {
             'appid': appid,
             'mch_id': mch_id,
@@ -60,7 +59,7 @@ class WeiXinPay():
             'notify_url': notify_url,
             'openid': openid
         }
-        print self.params
+        #print self.params
 
         self.url = 'https://api.mch.weixin.qq.com/pay/unifiedorder'  # 微信请求url
         self.error = None
@@ -74,11 +73,11 @@ class WeiXinPay():
             v = value.get(k, '').strip()
             v = v.encode('utf8')
             k = k.encode('utf8')
-            print('%s => %s' % (k, v))
+            #print('%s => %s' % (k, v))
             pair_array.append('%s=%s' % (k, v))
 
         tmp = '&'.join(pair_array)
-        print("key_value_url ==> %s " % tmp)
+        #print("key_value_url ==> %s " % tmp)
         return tmp
 
     def get_sign(self, params):
@@ -86,10 +85,10 @@ class WeiXinPay():
         """
         stringA = self.key_value_url(params)
         stringSignTemp = stringA + '&key=' + api_key  # api_key, API密钥，需要在商户后台设置
-        print("stringSignTemp ==> %s" % stringSignTemp)
+        #print("stringSignTemp ==> %s" % stringSignTemp)
         sign = (md5(stringSignTemp).hexdigest()).upper()
         params['sign'] = sign
-        print("sign ==> %s" % sign)
+        print("==> %s" % sign)
 
     def get_req_xml(self):
         """拼接XML
@@ -101,7 +100,7 @@ class WeiXinPay():
             k = k.encode('utf8')
             xml += '<' + k + '>' + v + '</' + k + '>'
         xml += "</xml>"
-        print(xml)
+        #print(xml)
         return xml
 
     def get_prepay_id(self):
@@ -113,22 +112,37 @@ class WeiXinPay():
         r = requests.post(self.url, data=xml, headers=headers, verify=False)
         r.encoding = 'utf-8'
         print(r.text)
-        print("++++++++++++++++++++++++++")
+        #print("++++++++++++++++++++++++++")
         re_xml = ElementTree.fromstring(r.text.encode('utf8'))
         xml_status = re_xml.getiterator('result_code')[0].text
-        print("result_code ==> %s" % xml_status)
+        #print("result_code ==> %s" % xml_status)
         if xml_status != 'SUCCESS':
             self.error = u"连接微信出错啦！"
             return
-        prepay_id = re_xml.getiterator('prepay_id')[0].text
+        #prepay_id = re_xml.getiterator('prepay_id')[0].text
 
-        self.params['prepay_id'] = prepay_id
-        #self.params['package'] = 'Sign=WXPay'
-        self.params['package'] = 'prepay_id=%s' % prepay_id
-        self.params['timestamp'] = str(int(time.time()))
-        self.params['paySign'] = re_xml.getiterator('sign')[0].text
+        options = optparse.Values({"pretty": False})
+        xml_json = json.loads(xml2json(r.text.encode('utf8'), options))['xml']
 
-        return self.params
+        r_params = {}
+        r_params['prepay_id'] = xml_json['prepay_id']
+        r_params['appid'] = xml_json['appid']
+        r_params['mch_id'] = xml_json['mch_id']
+        r_params['nonce_str'] = xml_json['nonce_str']
+        r_params['sign'] = xml_json['sign']
+        r_params['prepay_id'] = xml_json['prepay_id']
+
+        r_params['paySign'] = xml_json['sign']
+        r_params['package'] = 'prepay_id=%s' % xml_json['prepay_id']
+
+        #self.params['prepay_id'] = prepay_id
+        ##self.params['package'] = 'Sign=WXPay'
+        #self.params['package'] = 'prepay_id=%s' % prepay_id
+        #self.params['timestamp'] = str(int(time.time()))
+        #self.params['paySign'] = re_xml.getiterator('sign')[0].text
+
+        print r_params
+        return r_params
 
     def re_finall(self):
         """得到prepay_id后再次签名，返回给终端参数
@@ -188,4 +202,4 @@ if __name__ == '__main__':
     weixin_pay = WeiXinPay(out_trade_no='b2', body='test', total_fee='100',
                            spbill_create_ip='8.8.8.8', openid='oGXiIwHwx_zB8ekXibYjdt3Xb_fE')
 
-    print weixin_pay.get_prepay_id()
+    weixin_pay.get_prepay_id()
