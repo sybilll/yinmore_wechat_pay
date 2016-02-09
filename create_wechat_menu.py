@@ -8,12 +8,12 @@ if __name__ == '__main__':
             {
                 'type': 'view',
                 'name': '油卡冲值',
-                'url': 'http://yinmore.follow.center/app#!/card_recharge'
+                'url': 'http://yinmore.follow.center/app#!/card_recharge/'
             },
             {
                 'type': 'view',
                 'name': '油卡管理',
-                'url': 'http://yinmore.follow.center/app#!/card_manager'
+                'url': 'http://yinmore.follow.center/app#!/card_manager/'
             },
         ]
     }
