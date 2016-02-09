@@ -8,7 +8,7 @@
     <form class="ui form">
         <div v-bind:class="{ 'error': card_number_error }" class="field">
             <label></label>
-            <div class="ui left icon input">
+            <div class="ui icon input">
                 <input @focus="cleanError" v-model="total_fee"  v-disable="disable_edit" type="number"  placeholder="充值金额">
                 <i class="yen icon"></i>
             </div>
@@ -20,10 +20,4 @@
             充值
         </button>
     </div>
-    <form class="ui form">
-        <div v-bind:class="{ 'error': card_number_error }" class="field">
-            <label>加油卡卡号</label>
-            <input @focus="cleanError"   v-disable="disable_edit" type="number"  placeholder="加油卡卡号">
-        </div>
-    </form>
 </div>
