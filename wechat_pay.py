@@ -134,6 +134,8 @@ class WeiXinPay():
 
         r_params['paySign'] = xml_json['sign']
         r_params['package'] = 'prepay_id=%s' % xml_json['prepay_id']
+        r_params['timestamp'] = self.params['timestamp']
+
 
         #self.params['prepay_id'] = prepay_id
         ##self.params['package'] = 'Sign=WXPay'
