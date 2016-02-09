@@ -26,6 +26,9 @@ module.exports =
           else
             @bind_info = data.data
             console.log data.data
+            if ! @bind_info
 
+              $('.small.modal').modal('show')
+              console.log 'jump'
             if ! @bind_info.card_number
               console.log 'jump'
