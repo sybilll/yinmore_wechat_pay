@@ -47,6 +47,7 @@ class WeiXinPay():
 
         # 生生随机字符
         nonce_str = ''.join(map(lambda xx: (hex(ord(xx))[2:]), os.urandom(16)))
+        #nonce_str = '1a9e98d596467ce78fd58c94f143e16'
         self.params = {
             'appid': appid,
             'mch_id': mch_id,
@@ -125,7 +126,8 @@ class WeiXinPay():
         #self.params['package'] = 'Sign=WXPay'
         self.params['package'] = 'prepay_id=%s' % prepay_id
         self.params['timestamp'] = str(int(time.time()))
-        self.params['paySign'] = self.params['sign']
+        self.params['paySign'] = re_xml.getiterator('sign')[0].text
+
         return self.params
 
     def re_finall(self):
