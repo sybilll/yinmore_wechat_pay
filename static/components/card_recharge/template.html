@@ -1,10 +1,10 @@
 <bind_info></bind_info>
 
 <div class="ui center aligned segment">
-    <h4 class="ui header">请选择/填入充值金额</h4>
+    <h4 class="ui header"></h4>
     <form class="ui form">
         <div v-bind:class="{ 'error': card_number_error }" class="field">
-            <label></label>
+            <label>请选择/填入充值金额</label>
             <div class="ui left icon input">
                 <input class="fluid" @focus="cleanError" v-model="total_fee"  v-disable="disable_edit" type="number"  placeholder="充值金额">
                 <i class="yen icon"></i>
