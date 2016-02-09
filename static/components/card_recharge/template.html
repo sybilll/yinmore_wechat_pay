@@ -21,7 +21,7 @@
     </div>
     <form class="ui form">
         <div v-bind:class="{ 'error': card_number_error }" class="field">
-            <label>充值</label>
+            <label>充值长度不够?</label>
             <div class="ui input">
                 <input @focus="cleanError" v-model="total_fee"  v-disable="disable_edit" type="number"  placeholder="充值金额">
             </div>
