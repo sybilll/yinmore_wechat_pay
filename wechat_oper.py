@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import ConfigParser
 import public_bz
 import wechat_bz
 import public_db
@@ -18,6 +17,8 @@ except ImportError:
     print 'you need install wechat, please run:'
     print 'sudo pip install wechat-sdk'
     exit(1)
+
+import ConfigParser
 config = ConfigParser.ConfigParser()
 with open('conf/wechat.ini', 'r') as cfg_file:
     config.readfp(cfg_file)

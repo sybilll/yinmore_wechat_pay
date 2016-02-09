@@ -20,6 +20,7 @@ import pg
 import public_db
 #import proxy
 import web_bz
+from wechat_pay import WeiXinPay
 try:
     #    from wechat_sdk import WechatBasic
     from wechat_sdk.messages import (
@@ -37,6 +38,28 @@ sys.setdefaultencoding('utf-8')
 OK = '0'
 
 
+class get_wechat_prepay_id(BaseHandler):
+
+    '''
+    取得统一下单id
+    '''
+    @tornado_bz.handleError
+    def post(self):
+        self.set_header("Content-Type", "application/json")
+        openid = self.get_secure_cookie("openid")
+        openid = 'oGXiIwHwx_zB8ekXibYjdt3Xb_fE'
+        remote_ip = self.request.remote_ip
+
+        data = json.loads(self.request.body)
+        total_fee = data['total_fee']
+
+        weixin_pay = WeiXinPay(out_trade_no='x2', body='英茂油卡冲值:%s' % total_fee, total_fee=total_fee,
+                               spbill_create_ip=remote_ip, openid=openid)
+
+        prepay = weixin_pay.re_finall()
+        self.write(json.dumps({'error': '0', 'data': prepay}, cls=public_bz.ExtEncoder))
+
+
 class get_wechat_bind_info(BaseHandler):
 
     @tornado_bz.handleError
@@ -48,9 +71,10 @@ class get_wechat_bind_info(BaseHandler):
         if bind_info:
             bind_info = bind_info[0]
         else:
-            bind_info=None
+            bind_info = None
 
         self.write(json.dumps({'error': '0', 'data': bind_info}, cls=public_bz.ExtEncoder))
+
 
 class save_wechat_bind_info(BaseHandler):
 
@@ -65,9 +89,10 @@ class save_wechat_bind_info(BaseHandler):
         data['openid'] = openid
         #where = "openid='%s' and card_number='%s' " % (openid, data['card_number'])
         where = "openid='%s' " % openid
-        id = db_bz.insertOrUpdate(pg, 'bind_card_info', data, where)
+        db_bz.insertOrUpdate(pg, 'bind_card_info', data, where)
 
         self.write(json.dumps({'error': '0'}))
+
 
 class set_openid(web_bz.set_openid):
     pass

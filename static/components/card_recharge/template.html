@@ -6,9 +6,9 @@
     <div @click="setTotalFee(200)" class="ui orange button">200</div>
     <div @click="setTotalFee(500)" class="ui red button">500</div>
     <form class="ui form">
-        <div v-bind:class="{ 'error': card_number_error }" class="field">
+        <div v-bind:class="{ 'error': total_fee_error }" class="field">
             <label></label>
-            <input v-model="total_fee" type="number"  placeholder="充值金额">
+            <input @focus="cleanError" v-model="total_fee" type="number"  placeholder="充值金额">
         </div>
     </form>
     <div class="ui center aligned basic segment">
