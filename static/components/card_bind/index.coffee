@@ -1,8 +1,13 @@
 require './style.less'
+error = require 'lib/functions/error.coffee'
+toast = require 'lib/functions/toast.coffee'
+top_toast = toast.getTopRightToast()
+
+
 module.exports =
   data:->
-    user_info:
-      user_name='bigzhu'
+    bind_info:
+      name=''
     loading: false
     disable_edit: true # 禁止编辑
     button_text:'修改资料'
@@ -10,7 +15,8 @@ module.exports =
     disable: require 'lib/directives/disable'
   template: require('./template.html')
   ready:->
-    if ! @user_info.card_number
+    error.setOnErrorVm(@)
+    if ! @bind_info.card_number
       @enable()
   methods:
     enable:->
@@ -26,21 +32,18 @@ module.exports =
         @loading=false
         @disable()
         parm = JSON.stringify
-          user_name:@user_info.user_name
-          blog:@user_info.blog
-          twitter:@user_info.twitter
-          github:@user_info.github
-          instagram:@user_info.instagram
-          slogan:@user_info.bio
-          picture:@user_info.picture
-        #$.ajax
-        #  url: '/add'
-        #  type: 'POST'
-        #  data : parm
-        #  success: (data, status, response) =>
-        #    if data.error != '0'
-        #      throw new Error(data.error)
-        #    else
-        #      top_toast["info"] "保存成功"
-        #      if @is_my #如果改的是自已的，那么要吧localstorage的内容也要update
-        #        localStorage.user_info = JSON.stringify(@user_info)
+          card_number:@bind_info.card_number
+          car_number:@bind_info.car_number
+          car_type:@bind_info.car_type
+          phone_number:@bind_info.phone_number
+          name:@bind_info.name
+          id_number:@bind_info.id_number
+        $.ajax
+          url: '/save_wechat_bind_info'
+          type: 'POST'
+          data : parm
+          success: (data, status, response) =>
+            if data.error != '0'
+              throw new Error(data.error)
+            else
+              top_toast["info"] "保存成功"

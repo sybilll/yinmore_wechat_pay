@@ -4,7 +4,7 @@
 初始化数据库
 '''
 import model_oper_bz
-from peewee import TextField, IntegerField, BooleanField, DateTimeField
+from peewee import TextField, IntegerField, DateTimeField
 from playhouse.postgres_ext import JSONField
 #import user_bz
 import public_bz
@@ -58,6 +58,20 @@ class wechat_user(model_oper_bz.base):
     groupid = IntegerField()  # 突然出现的
 
 
+class bind_card_info(model_oper_bz.base):
+
+    '''
+    绑定的油卡信息 create by bigzhu at 16/02/09 00:42:55
+    '''
+    card_number = TextField()  # 加油卡卡号
+    car_number = TextField()  # 车牌号
+    car_type = TextField()  # 车型
+    phone_number = TextField()  # 手机号
+    name = TextField()  # 姓名
+    id_number = TextField()  # 身份证号
+    openid = TextField()  # wechat openid
+
+
 class upload_info(model_oper_bz.base):
     openid = TextField()  # 用户的标识，对当前公众号唯一
     description = TextField(null=True)  # 客户的描述
@@ -87,4 +101,6 @@ if __name__ == '__main__':
     #model_oper_bz.dropTable(upload_info, db_name)
     #model_oper_bz.dropTable(vote, db_name)
     #model_oper_bz.dropTable(hits, db_name)
-    model_oper_bz.createAllTable(globals(), db_name, user=user, password=pw, host=host)
+    #model_oper_bz.createAllTable(globals(), db_name, user=user, password=pw, host=host)
+    model_oper_bz.reCreateTable(bind_card_info, db_name, user=user, password=pw, host=host)
+

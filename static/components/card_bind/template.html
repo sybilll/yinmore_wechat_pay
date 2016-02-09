@@ -1,28 +1,30 @@
-<div v-show="user_info"  class="ui piled center aligned segment">
-    <h4 class="ui header">(%user_info.user_name%)</h4>
+<div class="ui piled center aligned segment">
+    <h4 class="ui header">(%bind_info.name%)</h4>
     <form class="ui form">
         <div class="field">
             <label>加油卡卡号</label>
-            <input v-model="user_info.twitter" v-disable="disable_edit" type="text"  placeholder="加油卡卡号">
+            <input v-model="bind_info.card_number" v-disable="disable_edit" type="text"  placeholder="加油卡卡号">
         </div>
-
         <div class="field">
-            <label>姓名</label>
-            <input v-model="user_info.github" v-disable="disable_edit" type="text"  placeholder="姓名">
+            <label>持卡人</label>
+            <input v-model="bind_info.name" v-disable="disable_edit" type="text"  placeholder="持卡人">
         </div>
-
         <div class="field">
             <label>手机号</label>
-            <input v-model="user_info.instagram" v-disable="disable_edit" type="text"  placeholder="手机号">
+            <input v-model="bind_info.phone_number" v-disable="disable_edit" type="text"  placeholder="手机号">
         </div>
 
         <div class="field">
             <label>车牌号</label>
-            <input v-model="user_info.tumblr"  v-disable="disable_edit" type="text"  placeholder="车牌号">
+            <input v-model="bind_info.car_number"  v-disable="disable_edit" type="text"  placeholder="车牌号">
         </div>
         <div class="field">
             <label>车型</label>
-            <input v-model="user_info.tumblr" v-disable="disable_edit" type="text"  placeholder="车型">
+            <input v-model="bind_info.car_type" v-disable="disable_edit" type="text"  placeholder="车型">
+        </div>
+        <div class="field">
+            <label>身份证号</label>
+            <input v-model="bind_info.id_number" v-disable="disable_edit" type="text"  placeholder="身份证号">
         </div>
     </form>
 

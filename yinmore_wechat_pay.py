@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # sys.setdefaultencoding() does not exist, here!
-#import json
-#import public_bz
+import json
+import public_bz
 import sys
-#import time
+import db_bz
 import wechat_bz
 
 #import db_bz
@@ -37,6 +37,29 @@ sys.setdefaultencoding('utf-8')
 OK = '0'
 
 
+class get_wechat_bind_info(BaseHandler):
+
+    @tornado_bz.handleError
+    def post(self):
+        self.set_header("Content-Type", "application/json")
+        openid = self.get_secure_cookie("openid")
+        bind_info = public_db.getBindInfoByOpenid(openid)
+        self.write(json.dumps({'error': '0', 'data': bind_info}, cls=public_bz.ExtEncoder))
+
+class save_wechat_bind_info(BaseHandler):
+
+    @tornado_bz.handleError
+    def post(self):
+
+        self.set_header("Content-Type", "application/json")
+        data = json.loads(self.request.body)
+
+        openid = self.get_secure_cookie("openid")
+        where = "openid='%s' and card_id='%s' " % openid, data['card_id']
+        id = db_bz.insertOrUpdate(pg, 'bind_card_info', data, where)
+
+        self.write(json.dumps({'error': '0'}))
+
 class set_openid(web_bz.set_openid):
     pass
 
@@ -48,10 +71,11 @@ class app(BaseHandler):
     '''
 
     #@wechat_bz.mustSubscribe
+
     def get(self):
         #openid = self.get_secure_cookie("openid")
-        #wechat_oper.addWechatUser(openid)
-        #print openid
+        # wechat_oper.addWechatUser(openid)
+        # print openid
         self.render(tornado_bz.getTName(self))
 
 
