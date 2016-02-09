@@ -37,14 +37,16 @@ module.exports =
             throw new Error(data.error)
           else
             prepay = data.data
-            WeixinJSBridge.invoke 'getBrandWCPayRequest', {
+            weixin_parm = {
               'appId': prepay.appid
               'timeStamp': prepay.timestamp
               'nonceStr': prepay.nonce_str
               'package': "prepay_id=#{prepay.prepay_id}"
               'signType': 'MD5'
               'paySign': prepay.sign
-            }, (res) ->
+            }
+            alert JSON.stringify(weixin_parm)
+            WeixinJSBridge.invoke 'getBrandWCPayRequest', weixin_parm, (res) ->
               if res.err_msg == 'get_brand_wcpay_request：ok'
                 alert '充值成功'
               else
