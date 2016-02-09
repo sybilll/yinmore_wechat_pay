@@ -54,7 +54,7 @@ class get_wechat_prepay_id(BaseHandler):
         total_fee = data['total_fee']
         card_number = data['card_number']
 
-        out_trade_no = pg.db.insert('pay', openid=openid, total_fee=total_fee, card_number=card_number)
+        out_trade_no = pg.db.insert('pay', seqname='pay_id_seq', openid=openid, total_fee=total_fee, card_number=card_number)
         print 'out_trade_no=',out_trade_no
 
         weixin_pay = WeiXinPay(out_trade_no=out_trade_no, body='英茂油卡冲值:%s' % total_fee, total_fee=total_fee,
