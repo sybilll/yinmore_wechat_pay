@@ -59,7 +59,7 @@ class get_wechat_prepay_id(BaseHandler):
         weixin_pay = WeiXinPay(out_trade_no=out_trade_no, body='英茂油卡冲值:%s' % total_fee, total_fee=total_fee,
                                spbill_create_ip=remote_ip, openid=openid)
 
-        prepay = weixin_pay.re_finall()
+        prepay = weixin_pay.get_prepay_id()
         self.write(json.dumps({'error': '0', 'data': prepay}, cls=public_bz.ExtEncoder))
 
 

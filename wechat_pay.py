@@ -121,8 +121,11 @@ class WeiXinPay():
         prepay_id = re_xml.getiterator('prepay_id')[0].text
 
         self.params['prepay_id'] = prepay_id
-        self.params['package'] = 'Sign=WXPay'
+        #self.params['package'] = 'Sign=WXPay'
+        self.params['package'] = 'prepay_id=%s' % prepay_id
         self.params['timestamp'] = str(int(time.time()))
+        self.params['paySign'] = self.params['sign']
+        return self.params
 
     def re_finall(self):
         """得到prepay_id后再次签名，返回给终端参数
