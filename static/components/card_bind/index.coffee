@@ -27,8 +27,7 @@ module.exports =
             throw new Error(data.error)
           else
             @bind_info = data.data
-            console.log data
-            if ! @bind_info.card_number
+            if ! @bind_info
               @enable()
     enable:->
         @disable_edit = false

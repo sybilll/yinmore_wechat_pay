@@ -16,6 +16,8 @@ module.exports =
     error.setOnErrorVm(@)
     @getBindInfo()
   methods:
+    jump:->
+      window.location.hash = '#!/card_manager'
     getBindInfo:->
       $.ajax
         url: '/get_wechat_bind_info'
@@ -27,8 +29,6 @@ module.exports =
             @bind_info = data.data
             console.log data.data
             if ! @bind_info
-
               $('.small.modal').modal('show')
-              console.log 'jump'
-            if ! @bind_info.card_number
-              console.log 'jump'
+            #if ! @bind_info.card_number
+            #  console.log 'jump'
