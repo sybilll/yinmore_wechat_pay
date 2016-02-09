@@ -2,17 +2,17 @@
 
 <div class="ui center aligned segment">
     <h4 class="ui header">请选择/填入充值金额</h4>
-    <div class="ui yellow button">100</div>
-    <div class="ui orange button">200</div>
-    <div class="ui red button">500</div>
+    <div @click="setTotalFee(100)" class="ui yellow button">100</div>
+    <div @click="setTotalFee(200)" class="ui orange button">200</div>
+    <div @click="setTotalFee(500)" class="ui red button">500</div>
     <form class="ui form">
         <div v-bind:class="{ 'error': card_number_error }" class="field">
             <label></label>
-            <input @focus="cleanError" v-model="total_fee"  v-disable="disable_edit" type="number"  placeholder="充值金额">
+            <input v-model="total_fee" type="number"  placeholder="充值金额">
         </div>
     </form>
     <div class="ui center aligned basic segment">
-        <button @click="save" v-bind:class="{ 'disabled': loading, 'loading': loading }"class="ui basic button">
+        <button @click="pay" v-bind:class="{ 'disabled': loading, 'loading': loading }"class="ui basic button">
             <i class="yen icon"></i>
             充值
         </button>
