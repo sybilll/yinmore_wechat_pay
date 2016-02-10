@@ -14,6 +14,7 @@ import json
 from xml.etree import ElementTree
 from xml2json import xml2json
 import optparse
+import wechat_bz
 
 import ConfigParser
 config = ConfigParser.ConfigParser()
@@ -64,22 +65,6 @@ class WeiXinPay():
         self.url = 'https://api.mch.weixin.qq.com/pay/unifiedorder'  # 微信请求url
         self.error = None
 
-    def key_value_url(self, value):
-        """将将键值对转为 key1=value1&key2=value2
-        """
-        key_az = sorted(value.keys())
-        pair_array = []
-        for k in key_az:
-            v = value.get(k, '').strip()
-            v = v.encode('utf8')
-            k = k.encode('utf8')
-            #print('%s => %s' % (k, v))
-            pair_array.append('%s=%s' % (k, v))
-
-        tmp = '&'.join(pair_array)
-        #print("key_value_url ==> %s " % tmp)
-        return tmp
-
     def get_sign(self, params):
         """生成sign
         """
@@ -94,14 +79,14 @@ class WeiXinPay():
     def get_req_xml(self):
         """拼接XML
         """
-        self.get_sign(self.params)
+        sign = wechat_bz.createSign(api_key, self.params)
+        self.params['sign'] = sign
         xml = "<xml>"
         for k, v in self.params.items():
             v = v.encode('utf8')
             k = k.encode('utf8')
             xml += '<' + k + '>' + v + '</' + k + '>'
         xml += "</xml>"
-        #print(xml)
         return xml
 
     def get_prepay_id(self):
@@ -113,15 +98,11 @@ class WeiXinPay():
         r = requests.post(self.url, data=xml, headers=headers, verify=False)
         r.encoding = 'utf-8'
         print(r.text)
-        #print("++++++++++++++++++++++++++")
         re_xml = ElementTree.fromstring(r.text.encode('utf8'))
         xml_status = re_xml.getiterator('result_code')[0].text
-        #print("result_code ==> %s" % xml_status)
         if xml_status != 'SUCCESS':
             self.error = u"连接微信出错啦！"
             return
-        #prepay_id = re_xml.getiterator('prepay_id')[0].text
-
         options = optparse.Values({"pretty": False})
         xml_json = json.loads(xml2json(r.text.encode('utf8'), options))['xml']
 
@@ -133,7 +114,7 @@ class WeiXinPay():
         r_params['package'] = 'prepay_id=%s' % xml_json['prepay_id']
         r_params['signType'] = 'MD5'
 
-        r_params['paySign'] = self.get_sign(r_params)
+        r_params['paySign'] = wechat_bz.createSign(api_key, r_params)
 
 
         #self.params['prepay_id'] = prepay_id
