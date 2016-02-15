@@ -1,26 +1,28 @@
-<table class="ui celled striped unstackable table">
-  <thead>
-    <tr>
+<div>
+  <table class="ui celled striped unstackable table">
+    <thead>
+      <tr>
         <th colspan="2">
-        <i class="user icon"></i>    (%bind_info.name%)
-    </th>
-  </tr></thead>
-  <tbody>
-    <tr>
-      <td class="collapsing">
-        <i class="payment icon"></i> 油卡
-      </td>
-      <td>(%bind_info.card_number%)</td>
-    </tr>
-  </tbody>
-</table>
+          <i class="user icon"></i>    (%bind_info.name%)
+        </th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="collapsing">
+            <i class="payment icon"></i> 油卡
+          </td>
+          <td>(%bind_info.card_number%)</td>
+        </tr>
+      </tbody>
+  </table>
 
-<div class="ui small modal">
-  <div class="header">您还没有绑定加油卡卡号</div>
-  <div class="content">
-    <p>请按确定，进入卡号管理绑定，绑定完成才能充值</p>
-  </div>
-  <div class="actions">
-    <div @click="jump" class="ui approve button">确定</div>
+  <div class="ui small modal">
+    <div class="header">您还没有绑定加油卡卡号</div>
+    <div class="content">
+      <p>请按确定，进入卡号管理绑定，绑定完成才能充值</p>
+    </div>
+    <div class="actions">
+      <div @click="jump" class="ui approve button">确定</div>
+    </div>
   </div>
 </div>

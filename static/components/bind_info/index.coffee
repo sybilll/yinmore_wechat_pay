@@ -7,6 +7,7 @@ toast = require 'lib/functions/toast.coffee'
 top_toast = toast.getTopRightToast()
 
 module.exports =
+  props: ['card_number']
   data:->
     bind_info:
       name:''
@@ -28,6 +29,7 @@ module.exports =
           else
             if data.data
               @bind_info = data.data
+              @card_number = @bind_info.card_number
             else
               $('.small.modal').modal('show')
             #if ! @bind_info.card_number

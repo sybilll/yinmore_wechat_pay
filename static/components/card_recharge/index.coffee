@@ -7,10 +7,13 @@ module.exports =
   data:->
     total_fee:null
     total_fee_error:false
+    card_number:null
   template: require('./template.html')
   components:
     'bind_info': require('../bind_info')
     'recharge_info': require('../recharge_info')
+  ready:->
+    error.setOnErrorVm(@)
   methods:
     setAndPay:(fee)->
       @total_fee = fee
@@ -25,10 +28,11 @@ module.exports =
         @total_fee_error=true
         top_toast.warning "充负数是不可以的"
         return
+      if @card_number == null
+        throw new Error('没有取到充值卡号，请刷新页面')
       parm = JSON.stringify
         total_fee:@total_fee*100 #后台单位是分
-        card_number:'数据要传递过来'
-
+        card_number:@card_number
       $.ajax
         url: '/get_wechat_prepay_id'
         type: 'POST'
