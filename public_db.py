@@ -8,7 +8,7 @@ user_oper = user_bz.UserOper(pg)
 
 def getPayInfo(openid):
     sql = '''
-    select * from pay
+    select id, card_number, stat_date, card_number, total_fee, status from pay
         where openid='%s'
         and status='payed'
         order by created_date desc
