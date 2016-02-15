@@ -31,6 +31,6 @@ module.exports =
               @bind_info = data.data
               @card_number = @bind_info.card_number
             else
-              $('.small.modal').modal('show')
+              $('#card_no_bind_waring').modal('show')
             #if ! @bind_info.card_number
             #  console.log 'jump'

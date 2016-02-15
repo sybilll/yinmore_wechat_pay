@@ -44,6 +44,16 @@ OPENID = 'oGXiIwHwx_zB8ekXibYjdt3Xb_fE'
 OPENID = None
 
 
+class admin(BaseHandler):
+
+    '''
+    后台管理的 create by bigzhu at 16/02/15 16:21:02
+    '''
+
+    def get(self):
+        self.render(tornado_bz.getTName(self))
+
+
 class payDone(BaseHandler):
 
     def post(self):
