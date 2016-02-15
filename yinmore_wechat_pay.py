@@ -58,7 +58,9 @@ class payDone(BaseHandler):
             out_trade_no = data['out_trade_no']
             cash_fee = data['cash_fee']
             where = " openid='%s' and id=%s" % (openid, out_trade_no)
-            count = pg.update('pay', status='payed', wexin_return=json_data, where=where)
+            from webpy_db import SQLLiteral
+
+            count = pg.update('pay', status='payed', wexin_return=json_data, stat_date=SQLLiteral('NOW()'), where=where)
             if count != 1:
                 error_info = 'update failure: %s' + json_data
                 print error_info
