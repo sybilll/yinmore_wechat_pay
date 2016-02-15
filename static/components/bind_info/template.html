@@ -16,13 +16,19 @@
       </tbody>
   </table>
 
-  <div class="ui align small modal">
-    <div class="header">您还没有绑定加油卡卡号</div>
-    <div class="content">
-      <p>请按确定，进入卡号管理绑定，绑定完成才能充值</p>
-    </div>
-    <div class="actions">
-      <div @click="jump" class="ui approve button">确定</div>
-    </div>
-  </div>
+  <div class="ui small modal">
+    <i class="close icon"></i>
+    <img src="/static/images/warning.png">  
 </div>
+
+
+<script type="text/javascript">
+  $('.message .close')
+  .on('click', function() {
+    $(this)
+      .closest('.message')
+      .transition('fade')
+    ;
+  })
+;
+</script>
