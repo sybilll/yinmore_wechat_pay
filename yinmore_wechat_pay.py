@@ -61,12 +61,12 @@ class payDone(BaseHandler):
             from webpy_db import SQLLiteral
             count = pg.update('pay', status='payed', wexin_return=json_data, stat_date=SQLLiteral('NOW()'), where=where)
             if count != 1:
-                error_info = 'update failure: %s' + json_data
+                error_info = 'update failure: count=%s where=%s' % (count, where)
                 print error_info
                 raise Exception(error_info)
             else:
                 wechat = wechat_oper.getWechat()
-                content = '''您支付的 %s 元已进入充值系统，正在向您的油卡充值，请耐心等候......''' % (int(cash_fee)/100.00)
+                content = '''您支付的 %s 元已进入充值系统，正在向您的油卡充值，请耐心等候......''' % (int(cash_fee) / 100.00)
                 wechat.send_text_message(openid, content)
         else:
             print data['return_msg']
