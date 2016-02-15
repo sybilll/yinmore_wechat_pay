@@ -1,4 +1,8 @@
-<div class="ui piled center aligned segment">
+<img src="/static/images/header.png" />
+<div class="ban">
+    <p>请在下面的区域绑定您的油卡号码</p>
+</div>
+<div class="ui center aligned ">
     <h4 class="ui header">(%bind_info.name%)</h4>
     <form class="ui form">
         <div v-bind:class="{ 'error': card_number_error }" class="field">
@@ -28,7 +32,7 @@
         </div>
     </form>
     <div class="ui center aligned basic segment">
-        <button @click="save" v-bind:class="{ 'disabled': loading, 'loading': loading }"class="ui basic button">
+        <button @click="save" v-bind:class="{ 'disabled': loading, 'loading': loading }"class="ui orange button">
             <i class="icon file text"></i>
             编辑
         </button>

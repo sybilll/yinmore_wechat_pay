@@ -108,7 +108,7 @@ class app(BaseHandler):
     主程序
     '''
 
-    @wechat_bz.mustSubscribe
+    # @wechat_bz.mustSubscribe
 
     def get(self):
         #openid = self.get_secure_cookie("openid")
