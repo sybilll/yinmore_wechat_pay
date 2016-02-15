@@ -168,12 +168,8 @@ class app(BaseHandler):
     主程序
     '''
 
-<<<<<<< HEAD
     # @wechat_bz.mustSubscribe
 
-=======
-    @wechat_bz.mustSubscribe
->>>>>>> 8cfe928c186040ff59f4c56f792eb39cf3d51949
     def get(self):
         #openid = self.get_secure_cookie("openid")
         # wechat_oper.addWechatUser(openid)
