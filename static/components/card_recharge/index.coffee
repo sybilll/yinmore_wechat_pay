@@ -11,8 +11,9 @@ module.exports =
   components:
     'bind_info': require('../bind_info')
   methods:
-    setTotalFee:(fee)->
+    setAndPay:(fee)->
       @total_fee = fee
+      @pay()
     pay:->
       @loading=true
       if not @total_fee
