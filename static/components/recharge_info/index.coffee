@@ -10,6 +10,8 @@ module.exports =
   ready:->
     error.setOnErrorVm(@)
     @getPayInfos()
+    #抛出到全局去污染
+    window.recharge_info = @
   methods:
     getPayInfos:->
       $.ajax
