@@ -1,6 +1,7 @@
 Vue.config.debug = true
 Vue.config.silent = false
 Vue.config.delimiters = ['(%', '%)']
+Vue.use(require('vue-moment')) #使用vue-moment https://github.com/brockpetrie/vue-moment
 Vue.transition 'fade',
   enter: (el, done) ->
     # 此时元素已被插入 DOM

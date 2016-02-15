@@ -35,7 +35,66 @@ except ImportError:
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
+import optparse
+options = optparse.Values({"pretty": False})
+from xml2json import xml2json
 OK = '0'
+
+OPENID = 'oGXiIwHwx_zB8ekXibYjdt3Xb_fE'
+OPENID = None
+
+
+class payDone(BaseHandler):
+
+    def post(self):
+
+        self.set_header("Content-Type", "application/json")
+        print self.request.body
+        json_data = xml2json(self.request.body.encode('utf8'), options)
+        data = json.loads(json_data)['xml']
+        return_code = data['return_code']
+        if return_code == 'SUCCESS':
+            openid = data['openid']
+            out_trade_no = data['out_trade_no']
+            cash_fee = data['cash_fee']
+            where = " openid='%s' and id=%s and (status<>'payed' or status is null) " % (openid, out_trade_no)
+            from webpy_db import SQLLiteral
+            count = pg.update('pay', status='payed', wexin_return=json_data, stat_date=SQLLiteral('NOW()'), where=where)
+            if count != 1:
+                error_info = 'update failure: count=%s where=%s' % (count, where)
+                print error_info
+                raise Exception(error_info)
+            else:
+                wechat = wechat_oper.getWechat()
+                content = '''您支付的 %s 元已进入充值系统，正在向您的油卡充值，请耐心等候......''' % (int(cash_fee) / 100.00)
+                wechat.send_text_message(openid, content)
+        else:
+            print data['return_msg']
+#{u'openid': u'oGXiIwHwx_zB8ekXibYjdt3Xb_fE', u'trade_type': u'JSAPI', u'cash_fee': u'1', u'nonce_str': u'798243e4902342c83e833c71141385f', u'return_code': u'SUCCESS', u'is_subscribe': u'Y', u'bank_type': u'CFT', u'mch_id': u'1308443701', u'out_trade_no': u'86', u'result_code': u'SUCCESS', u'total_fee': u'1', u'appid': u'wx907d8a3f50de65db', u'fee_type': u'CNY', u'time_end': u'20160215113326', u'transaction_id': u'1002230516201602153283628055', u'sign': u'CAD12073F45232BB600B8F066B434A30'}
+
+        success = '''
+        <xml>
+          <return_code><![CDATA[SUCCESS]]></return_code>
+          <return_msg><![CDATA[OK]]></return_msg>
+        </xml>
+        '''
+        self.write(success)
+
+
+class getPayInfos(BaseHandler):
+
+    '''
+    取得统一下单id
+    '''
+    @tornado_bz.handleError
+    def post(self):
+        self.set_header("Content-Type", "application/json")
+        openid = self.get_secure_cookie("openid")
+        if OPENID:
+            openid = OPENID
+        pay_infos = public_db.getPayInfo(openid)
+
+        self.write(json.dumps({'error': '0', 'data': pay_infos}, cls=public_bz.ExtEncoder))
 
 
 class get_wechat_prepay_id(BaseHandler):
@@ -55,7 +114,7 @@ class get_wechat_prepay_id(BaseHandler):
         card_number = data['card_number']
 
         out_trade_no = pg.db.insert('pay', seqname='pay_id_seq', openid=openid, total_fee=total_fee, card_number=card_number)
-        print 'out_trade_no=',out_trade_no
+        print 'out_trade_no=', out_trade_no
 
         weixin_pay = WeiXinPay(out_trade_no=out_trade_no, body='英茂油卡冲值:%s' % total_fee, total_fee=total_fee,
                                spbill_create_ip=remote_ip, openid=openid)
@@ -70,7 +129,8 @@ class get_wechat_bind_info(BaseHandler):
     def post(self):
         self.set_header("Content-Type", "application/json")
         openid = self.get_secure_cookie("openid")
-        #openid = 123
+        if OPENID:
+            openid = OPENID
         bind_info = public_db.getBindInfoByOpenid(openid)
         if bind_info:
             bind_info = bind_info[0]
@@ -108,8 +168,12 @@ class app(BaseHandler):
     主程序
     '''
 
+<<<<<<< HEAD
     # @wechat_bz.mustSubscribe
 
+=======
+    @wechat_bz.mustSubscribe
+>>>>>>> 8cfe928c186040ff59f4c56f792eb39cf3d51949
     def get(self):
         #openid = self.get_secure_cookie("openid")
         # wechat_oper.addWechatUser(openid)

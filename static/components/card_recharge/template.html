@@ -1,10 +1,10 @@
-<bind_info></bind_info>
+<bind_info :card_number.sync="card_number" ></bind_info>
 
 <div class="ui center aligned segment">
     <h4 class="ui header">请选择/填入充值金额</h4>
-    <div @click="setTotalFee(100)" class="ui yellow button">100</div>
-    <div @click="setTotalFee(200)" class="ui orange button">200</div>
-    <div @click="setTotalFee(500)" class="ui red button">500</div>
+    <div @click="setAndPay(100)" class="ui yellow button">100</div>
+    <div @click="setAndPay(200)" class="ui orange button">200</div>
+    <div @click="setAndPay(500)" class="ui red button">500</div>
     <form class="ui form">
         <div v-bind:class="{ 'error': total_fee_error }" class="field">
             <label></label>
@@ -18,3 +18,4 @@
         </button>
     </div>
 </div>
+<recharge_info></recharge_info>

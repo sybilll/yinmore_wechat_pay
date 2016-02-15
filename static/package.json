@@ -5,7 +5,7 @@
   "scripts": {
     "server": "webpack-dev-server --devtool eval --progress --colors --content-base build",
     "min": "webpack --progress --watch --optimize-minimize --optimize-dedupe",
-    "dev": "webpack --progress --watch"
+    "dev": "webpack --progress --watch --colors"
   },
   "author": "",
   "license": "ISC",
@@ -20,6 +20,7 @@
     "semantic-ui": "^2.1.7",
     "style-loader": "^0.12.3",
     "vue": "^1.0.8",
+    "vue-moment": "^1.0.5",
     "vue-router": "github:vuejs/vue-router"
   }
 }
