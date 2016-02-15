@@ -71,11 +71,13 @@ class bind_card_info(model_oper_bz.base):
     id_number = TextField(null=True)  # 身份证号
     openid = TextField()  # wechat openid
 
+
 class pay(model_oper_bz.base):
     openid = TextField()  # wechat openid
     card_number = TextField()  # 加油卡卡号
     status = TextField(null=True)
-    total_fee = IntegerField() #单位分
+    total_fee = IntegerField()  # 单位分
+    wexin_return = TextField(null=True) #weixin返的的信息
 
 
 class upload_info(model_oper_bz.base):
@@ -104,6 +106,5 @@ if __name__ == '__main__':
     # user_bz.createTable(db_name)
     #model_oper_bz.dropTable(hits, db_name)
     #model_oper_bz.createTable(hits, db_name)
-    model_oper_bz.createAllTable(globals(), db_name, user=user, password=pw, host=host)
-    #model_oper_bz.reCreateTable(bind_card_info, db_name, user=user, password=pw, host=host)
-
+    #model_oper_bz.createAllTable(globals(), db_name, user=user, password=pw, host=host)
+    model_oper_bz.reCreateTable(pay, db_name, user=user, password=pw, host=host)

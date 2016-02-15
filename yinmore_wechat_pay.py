@@ -50,8 +50,37 @@ class payDone(BaseHandler):
 
         self.set_header("Content-Type", "application/json")
         print self.request.body
-        data = json.loads(xml2json(self.request.body.encode('utf8'), options))['xml']
-        print data
+        json_data = xml2json(self.request.body.encode('utf8'), options)
+        data = json.loads(json_data)['xml']
+        return_code = data['openid']
+        if return_code == 'SUCCESS':
+            openid = data['openid']
+            out_trade_no = data['out_trade_no']
+            cash_fee = data['cash_fee']
+            where = " openid='%s' id=%s" % (openid, out_trade_no)
+            count = pg.update('pay', status='payed', wexin_return=data, where=where)
+            if count != 1:
+                error_info = 'update failure: %s' + json_data
+                print error_info
+                raise Exception(error_info)
+            else:
+                wechat = wechat_oper.getWechat()
+                content = '''
+                您支付的 %s 元已经进入充值系统
+                正在向您的油卡充值，请耐心等候
+                ''' % int(cash_fee) * 100
+                wechat.send_text_message(openid, content)
+        else:
+            print data['return_msg']
+#{u'openid': u'oGXiIwHwx_zB8ekXibYjdt3Xb_fE', u'trade_type': u'JSAPI', u'cash_fee': u'1', u'nonce_str': u'798243e4902342c83e833c71141385f', u'return_code': u'SUCCESS', u'is_subscribe': u'Y', u'bank_type': u'CFT', u'mch_id': u'1308443701', u'out_trade_no': u'86', u'result_code': u'SUCCESS', u'total_fee': u'1', u'appid': u'wx907d8a3f50de65db', u'fee_type': u'CNY', u'time_end': u'20160215113326', u'transaction_id': u'1002230516201602153283628055', u'sign': u'CAD12073F45232BB600B8F066B434A30'}
+
+        success = '''
+        <xml>
+          <return_code><![CDATA[SUCCESS]]></return_code>
+          <return_msg><![CDATA[OK]]></return_msg>
+        </xml>
+        '''
+        self.write(success)
 
 
 class getPayInfos(BaseHandler):
@@ -141,8 +170,7 @@ class app(BaseHandler):
     主程序
     '''
 
-    #@wechat_bz.mustSubscribe
-
+    @wechat_bz.mustSubscribe
     def get(self):
         #openid = self.get_secure_cookie("openid")
         # wechat_oper.addWechatUser(openid)
