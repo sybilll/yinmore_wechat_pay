@@ -40,6 +40,15 @@ OK = '0'
 OPENID = 'oGXiIwHwx_zB8ekXibYjdt3Xb_fE'
 
 
+class payDone(BaseHandler):
+
+    def post(self):
+        self.set_header("Content-Type", "application/json")
+        print self.request.body
+        data = json.loads(self.request.body)
+        print data
+
+
 class getPayInfos(BaseHandler):
 
     '''
@@ -52,7 +61,6 @@ class getPayInfos(BaseHandler):
         if OPENID:
             openid = OPENID
         pay_infos = public_db.getPayInfo(openid)
-        print pay_infos
 
         self.write(json.dumps({'error': '0', 'data': pay_infos}, cls=public_bz.ExtEncoder))
 
