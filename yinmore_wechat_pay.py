@@ -38,6 +38,7 @@ sys.setdefaultencoding('utf-8')
 OK = '0'
 
 OPENID = 'oGXiIwHwx_zB8ekXibYjdt3Xb_fE'
+OPENID = None
 
 
 class payDone(BaseHandler):
