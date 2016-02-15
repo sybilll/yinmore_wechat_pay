@@ -54,8 +54,7 @@ module.exports =
             #alert JSON.stringify(weixin_parm)
             WeixinJSBridge.invoke 'getBrandWCPayRequest', weixin_parm, (res) ->
               if res.err_msg == 'get_brand_wcpay_request:ok'
-                alert '充值成功'
-                _.delay(window.recharge_info.getPayInfos, 5000)
+                _.delay(window.recharge_info.getPayInfos, 3000)
               else
                 #alert(res.err_code + res.err_desc + res.err_msg)
                 console.log(res.err_code + res.err_desc)
