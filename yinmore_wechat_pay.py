@@ -52,7 +52,7 @@ class payDone(BaseHandler):
         print self.request.body
         json_data = xml2json(self.request.body.encode('utf8'), options)
         data = json.loads(json_data)['xml']
-        return_code = data['openid']
+        return_code = data['return_code']
         if return_code == 'SUCCESS':
             openid = data['openid']
             out_trade_no = data['out_trade_no']
