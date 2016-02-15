@@ -35,6 +35,9 @@ except ImportError:
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
+import optparse
+options = optparse.Values({"pretty": False})
+from xml2json import xml2json
 OK = '0'
 
 OPENID = 'oGXiIwHwx_zB8ekXibYjdt3Xb_fE'
@@ -44,9 +47,10 @@ OPENID = None
 class payDone(BaseHandler):
 
     def post(self):
+
         self.set_header("Content-Type", "application/json")
         print self.request.body
-        data = json.loads(self.request.body)
+        data = json.loads(xml2json(self.request.body.encode('utf8'), options))['xml']
         print data
 
 
