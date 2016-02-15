@@ -6,6 +6,16 @@ import user_bz
 user_oper = user_bz.UserOper(pg)
 
 
+def getPayInfo(openid):
+    sql = '''
+    select * from pay
+        where openid='%s'
+        and status='payed'
+        order by created_date desc
+    ''' % openid
+    return list(pg.query(sql))
+
+
 def getLast(user_id):
     if user_id is None:
         return
@@ -46,6 +56,7 @@ def getWechatUserByOpenid(openid):
     '''
     return list(pg.select('wechat_user', where="openid='%s'" % openid))
 
+
 def getBindInfoByOpenid(openid):
     sql = '''
         select b.openid,
@@ -59,6 +70,7 @@ def getBindInfoByOpenid(openid):
          where b.openid='%s'
     ''' % openid
     return pg.query(sql)
+
 
 def getWechatUserBindInfoByOpenid(openid):
     '''

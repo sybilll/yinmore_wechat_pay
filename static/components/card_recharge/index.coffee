@@ -10,6 +10,7 @@ module.exports =
   template: require('./template.html')
   components:
     'bind_info': require('../bind_info')
+    'recharge_info': require('../recharge_info')
   methods:
     setAndPay:(fee)->
       @total_fee = fee

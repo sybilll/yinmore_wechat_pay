@@ -38,6 +38,22 @@ sys.setdefaultencoding('utf-8')
 OK = '0'
 
 
+class getPayInfos(BaseHandler):
+
+    '''
+    取得统一下单id
+    '''
+    @tornado_bz.handleError
+    def post(self):
+        self.set_header("Content-Type", "application/json")
+        openid = self.get_secure_cookie("openid")
+        openid = 'oGXiIwHwx_zB8ekXibYjdt3Xb_fE'
+        pay_infos = public_db.getPayInfo(openid)
+        print pay_infos
+
+        self.write(json.dumps({'error': '0', 'data': pay_infos}, cls=public_bz.ExtEncoder))
+
+
 class get_wechat_prepay_id(BaseHandler):
 
     '''
@@ -55,7 +71,7 @@ class get_wechat_prepay_id(BaseHandler):
         card_number = data['card_number']
 
         out_trade_no = pg.db.insert('pay', seqname='pay_id_seq', openid=openid, total_fee=total_fee, card_number=card_number)
-        print 'out_trade_no=',out_trade_no
+        print 'out_trade_no=', out_trade_no
 
         weixin_pay = WeiXinPay(out_trade_no=out_trade_no, body='英茂油卡冲值:%s' % total_fee, total_fee=total_fee,
                                spbill_create_ip=remote_ip, openid=openid)
@@ -108,7 +124,7 @@ class app(BaseHandler):
     主程序
     '''
 
-    @wechat_bz.mustSubscribe
+    #@wechat_bz.mustSubscribe
 
     def get(self):
         #openid = self.get_secure_cookie("openid")
