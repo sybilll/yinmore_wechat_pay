@@ -66,7 +66,7 @@ class payDone(BaseHandler):
                 raise Exception(error_info)
             else:
                 wechat = wechat_oper.getWechat()
-                content = '''您支付的 %s 元已进入充值系统，正在向您的油卡充值，请耐心等候......''' % (int(cash_fee)/100)
+                content = '''您支付的 %s 元已进入充值系统，正在向您的油卡充值，请耐心等候......''' % (int(cash_fee)/100.00)
                 print content
                 wechat.send_text_message(openid, content)
         else:
