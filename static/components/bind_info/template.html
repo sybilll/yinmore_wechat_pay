@@ -17,18 +17,10 @@
   </table>
 
   <div class="ui small modal">
-    <i class="close icon"></i>
-    <img src="/static/images/warning.png">  
+    <i @click="jump" class="close icon"></i>
+    <img src="/static/images/warning.png">
+    <!-- <div class="actions">
+      <div @click="jump" class="ui orange approve button">确定</div>
+    </div>
+  </div> -->
 </div>
-
-
-<script type="text/javascript">
-  $('.message .close')
-  .on('click', function() {
-    $(this)
-      .closest('.message')
-      .transition('fade')
-    ;
-  })
-;
-</script>
