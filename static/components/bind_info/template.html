@@ -1,9 +1,12 @@
 <div>
-  <table class="ui celled striped unstackable table">
+  <!-- <table class="ui celled striped unstackable table visacard">
     <thead>
       <tr>
         <th colspan="2">
-          <i class="user icon"></i>    (%bind_info.name%)
+         
+        </th>
+        <th class="cancel pull right">
+           <i class="sign out icon"></i>解除绑定
         </th>
       </tr></thead>
       <tbody>
@@ -14,9 +17,20 @@
           <td>(%bind_info.card_number%)</td>
         </tr>
       </tbody>
-  </table>
+  </table> -->
+  <div class="ui card">
+    <div class="content">
+      <a class="right floated" href="#"><p>解绑</p></a>
+      <i class="right floated sign out icon"></i>
+      <i class="user icon"></i>(%bind_info.name%)
+    </div>
+    <div class="description">
+      (%bind_info.card_number%)
+    </div>
+  </div>
 
-  <div id="card_no_bind_waring" class="ui small modal">
+  <div  class="ui small modal">
     <i @click="jump" class="close icon"></i>
     <img src="/static/images/warning.png">
+ </div>
 </div>
