@@ -1,23 +1,22 @@
-<div>
-  <table class="ui celled striped unstackable table">
-    <thead>
+<table class="ui celled striped unstackable table">
+  <thead>
+    <tr>
+      <th colspan="2">
+        <i class="user icon"></i>    (%bind_info.name%)
+      </th>
+    </tr></thead>
+    <tbody>
       <tr>
-        <th colspan="2">
-          <i class="user icon"></i>    (%bind_info.name%)
-        </th>
-      </tr></thead>
-      <tbody>
-        <tr>
-          <td class="collapsing">
-            <i class="payment icon"></i> 油卡
-          </td>
-          <td>(%bind_info.card_number%)</td>
-        </tr>
-      </tbody>
-  </table>
+        <td class="collapsing">
+          <i class="payment icon"></i> 油卡
+        </td>
+        <td>(%bind_info.card_number%)</td>
+      </tr>
+    </tbody>
+    <div id="card_no_bind_waring" class="ui small modal">
+      <i @click="jump" class="close icon"></i>
+      <img src="/static/images/warning.png">
+    </div>
+</table>
 
-  <div id="card_no_bind_waring" class="ui small modal">
-    <i @click="jump" class="close icon"></i>
-    <img src="/static/images/warning.png">
-  </div>
-</div>
+
