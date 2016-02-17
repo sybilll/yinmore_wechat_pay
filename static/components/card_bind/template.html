@@ -20,7 +20,14 @@
     </div>
     <div class="field">
       <label>车型</label>
-      <input v-model="bind_info.car_type" v-disable="disable_edit" type="text"  placeholder="车型">
+      <select v-model="bind_info.car_type" v-disable="disable_edit" class="ui fluid dropdown">
+        <option>私家车</option>
+        <option>出租车</option>
+        <option>驾培车</option>
+        <option>公车</option>
+        <option>货车</option>
+        <option>摩托车</option>
+      </select>
     </div>
     <div v-bind:class="{ 'error': id_number_error }" class="field">
       <label>身份证号</label>
