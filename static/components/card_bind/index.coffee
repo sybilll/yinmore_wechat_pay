@@ -6,6 +6,10 @@ top_toast = toast.getTopRightToast()
 module.exports =
   data:->
     card_number_error:false
+    name_error:false
+    phone_number_error:false
+    id_number_error:false
+
     bind_info:
       name=''
     loading: false
@@ -40,11 +44,24 @@ module.exports =
       if @disable_edit
         @enable()
       else
-        @loading=true
         if not @bind_info.card_number
           @card_number_error=true
           top_toast.warning "必须填入加油卡卡号"
           return
+        if not @bind_info.name
+          @name_error=true
+          top_toast.warning "必须填入持卡人姓名"
+          return
+        if not @bind_info.phone_number
+          @phone_number_error=true
+          top_toast.warning "必须填入手机号"
+          return
+        if not @bind_info.id_number
+          @id_number_error=true
+          top_toast.warning "必须填入手机号"
+          return
+
+        @loading=true
         parm = JSON.stringify
           card_number:@bind_info.card_number
           car_number:@bind_info.car_number
@@ -66,4 +83,7 @@ module.exports =
               top_toast["info"] "保存成功"
     cleanError:->
       @card_number_error=false
+      @name_error=false
+      @phone_number_error=false
+      @id_number_error=false
       @loading = false
