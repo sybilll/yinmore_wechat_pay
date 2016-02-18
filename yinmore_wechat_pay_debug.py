@@ -102,7 +102,7 @@ class getPayInfos(BaseHandler):
         openid = self.get_secure_cookie("openid")
         if OPENID:
             openid = OPENID
-        pay_infos = public_db.getPayInfo(openid)
+        pay_infos = public_db.getPayInfo(openid, ['payed'])
 
         self.write(json.dumps({'error': '0', 'data': pay_infos}, cls=public_bz.ExtEncoder))
 

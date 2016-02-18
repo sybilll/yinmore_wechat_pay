@@ -42,7 +42,17 @@ OK = '0'
 
 OPENID = 'oGXiIwHwx_zB8ekXibYjdt3Xb_fE'
 OPENID = None
+class getPayInfos(BaseHandler):
 
+    '''
+    查出已支付信息
+    '''
+    @tornado_bz.handleError
+    def post(self):
+        self.set_header("Content-Type", "application/json")
+        pay_infos = public_db.getPayInfo(openid, ['payed'])
+
+        self.write(json.dumps({'error': '0', 'data': pay_infos}, cls=public_bz.ExtEncoder))
 
 class login(web_bz.login):
 
@@ -105,7 +115,7 @@ class payDone(BaseHandler):
 class getPayInfos(BaseHandler):
 
     '''
-    取得统一下单id
+    查出已支付信息
     '''
     @tornado_bz.handleError
     def post(self):
