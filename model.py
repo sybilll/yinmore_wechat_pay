@@ -77,7 +77,7 @@ class pay(model_oper_bz.base):
     card_number = TextField()  # 加油卡卡号
     status = TextField(null=True)
     total_fee = IntegerField()  # 单位分
-    wexin_return = TextField(null=True) #weixin返的的信息
+    wexin_return = TextField(null=True)  # weixin返的的信息
 
 
 class upload_info(model_oper_bz.base):
@@ -100,11 +100,11 @@ class hits(model_oper_bz.base):
 
 
 if __name__ == '__main__':
-    #import user_bz
-    # user_bz.createTable(db_name)
+    import model_bz
+    model_bz.user_info
     # 需要用户登录模块
     # user_bz.createTable(db_name)
     #model_oper_bz.dropTable(hits, db_name)
     #model_oper_bz.createTable(hits, db_name)
     #model_oper_bz.createAllTable(globals(), db_name, user=user, password=pw, host=host)
-    model_oper_bz.reCreateTable(pay, db_name, user=user, password=pw, host=host)
+    model_oper_bz.reCreateTable(model_bz.user_info, db_name, user=user, password=pw, host=host)

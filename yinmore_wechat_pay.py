@@ -43,6 +43,40 @@ OK = '0'
 OPENID = 'oGXiIwHwx_zB8ekXibYjdt3Xb_fE'
 OPENID = None
 
+class getAdminPayInfos(BaseHandler):
+
+    '''
+     后台管理查支付信息
+    '''
+    @tornado_bz.mustLogin
+    @tornado_bz.handleError
+    def post(self):
+        self.set_header("Content-Type", "application/json")
+        pay_infos = public_db.getPayInfo()
+
+        self.write(json.dumps({'error': '0', 'data': pay_infos}, cls=public_bz.ExtEncoder))
+
+class getPayInfos(BaseHandler):
+
+    '''
+    查出已支付信息
+    '''
+    @tornado_bz.handleError
+    def post(self):
+        self.set_header("Content-Type", "application/json")
+        pay_infos = public_db.getPayInfo(openid, ['payed'])
+
+        self.write(json.dumps({'error': '0', 'data': pay_infos}, cls=public_bz.ExtEncoder))
+
+class login(web_bz.login):
+
+    '''
+    要用自已的template，得重载
+    '''
+
+    def get(self):
+        self.render(self.template)
+
 
 class admin(BaseHandler):
 
@@ -50,6 +84,7 @@ class admin(BaseHandler):
     后台管理的 create by bigzhu at 16/02/15 16:21:02
     '''
 
+    @tornado_bz.mustLogin
     def get(self):
         self.render(tornado_bz.getTName(self))
 
@@ -94,7 +129,7 @@ class payDone(BaseHandler):
 class getPayInfos(BaseHandler):
 
     '''
-    取得统一下单id
+    查出已支付信息
     '''
     @tornado_bz.handleError
     def post(self):
@@ -123,7 +158,7 @@ class get_wechat_prepay_id(BaseHandler):
         total_fee = data['total_fee']
         card_number = data['card_number']
 
-        out_trade_no = pg.db.insert('pay', seqname='pay_id_seq', openid=openid, total_fee=total_fee, card_number=card_number)
+        out_trade_no = pg.db.insert('pay', seqname='pay_id_seq', openid=openid, total_fee=total_fee, card_number=card_number, status='prepay')
         print 'out_trade_no=', out_trade_no
 
         weixin_pay = WeiXinPay(out_trade_no=out_trade_no, body='英茂油卡冲值:%s' % total_fee, total_fee=total_fee,
@@ -283,6 +318,8 @@ if __name__ == "__main__":
     # sitemap
     url_map.append((r'/sitemap.xml()', tornado.web.StaticFileHandler, {'path': "./static/sitemap.xml"}))
     #url_map.append((r'/static/(.*)', tornado.web.StaticFileHandler, {'path': "./static"}))
+
+    url_map.append((r'/', admin))
 
     settings = tornado_bz.getSettings()
     settings["pg"] = pg

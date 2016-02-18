@@ -7,9 +7,11 @@ module.exports =
   data:->
     pay_infos:null
     status_desc:
+      prepay: '生成订单'
       payed:'已支付'
       recharging:'冲入油卡中...'
       recharged:'已冲入油卡'
+
   template: require('./template.html')
   ready:->
     error.setOnErrorVm(@)
@@ -19,7 +21,7 @@ module.exports =
   methods:
     getPayInfos:->
       $.ajax
-        url: '/getPayInfos'
+        url: '/getAdminPayInfos'
         type: 'POST'
         success: (data, status, response) =>
           if data.error != '0'

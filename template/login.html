@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block js%}
+<script src="{{static_url('build/login.js')}}"></script>
+{% end %}
+
+{% block body %}
+<div style="margin-top: 20px;">
+    <div id="login">
+        <main-login :oauths="oauths"></main-login>
+    </div>
+</div>
+{% end %}
+
+

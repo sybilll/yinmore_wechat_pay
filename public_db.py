@@ -2,17 +2,23 @@
 # -*- coding: utf-8 -*-
 import pg
 import user_bz
+import db_bz
 #import time_bz
 user_oper = user_bz.UserOper(pg)
 
 
-def getPayInfo(openid):
+def getPayInfo(openid=None, statuses=None):
     sql = '''
     select id, card_number, stat_date, card_number, total_fee, status from pay
-        where openid='%s'
-        and status='payed'
-        order by created_date desc
-    ''' % openid
+        where 1=1
+    '''
+    if openid:
+        sql += " and openid='%s' " % openid
+    if statuses:
+        in_statuses = db_bz.listToInSql(statuses)
+        sql += " and status in (%s) " % in_statuses
+    sql += " order by created_date desc "
+    print sql
     return list(pg.query(sql))
 
 
