@@ -13,6 +13,9 @@
       <th>
         时间
       </th>
+      <th>
+        状态
+      </th>
     </tr>
   </thead>
   <tbody>
@@ -21,6 +24,7 @@
       <td>(%pay_info.card_number%)</td>
       <td>(%pay_info.total_fee/100%)</td>
       <td>(% pay_info.stat_date | moment "YY年M月D日 HH:mm:ss" %)</td>
+      <td>(% status_desc[pay_info.status] %)</td>
     </tr>
   </tbody>
 </table>

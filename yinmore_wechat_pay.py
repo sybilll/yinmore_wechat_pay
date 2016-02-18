@@ -44,12 +44,23 @@ OPENID = 'oGXiIwHwx_zB8ekXibYjdt3Xb_fE'
 OPENID = None
 
 
+class login(web_bz.login):
+
+    '''
+    要用自已的template，得重载
+    '''
+
+    def get(self):
+        self.render(self.template)
+
+
 class admin(BaseHandler):
 
     '''
     后台管理的 create by bigzhu at 16/02/15 16:21:02
     '''
 
+    @tornado_bz.mustLogin
     def get(self):
         self.render(tornado_bz.getTName(self))
 
@@ -179,7 +190,6 @@ class app(BaseHandler):
     '''
 
     @wechat_bz.mustSubscribe
-
     def get(self):
         #openid = self.get_secure_cookie("openid")
         # wechat_oper.addWechatUser(openid)
@@ -283,6 +293,8 @@ if __name__ == "__main__":
     # sitemap
     url_map.append((r'/sitemap.xml()', tornado.web.StaticFileHandler, {'path': "./static/sitemap.xml"}))
     #url_map.append((r'/static/(.*)', tornado.web.StaticFileHandler, {'path': "./static"}))
+
+    url_map.append((r'/', admin))
 
     settings = tornado_bz.getSettings()
     settings["pg"] = pg

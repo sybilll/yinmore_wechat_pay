@@ -3,6 +3,8 @@ module.exports = {
   devtool: 'source-map',
   entry: {
         app: "./app.coffee",
+        admin: "./admin.coffee",
+        login: "./login.coffee",
   	},
   output: {
   		path: path.join(__dirname, "build"),

@@ -6,6 +6,10 @@ top_toast = toast.getTopRightToast()
 module.exports =
   data:->
     pay_infos:null
+    status_desc:
+      payed:'已支付'
+      recharging:'冲入油卡中...'
+      recharged:'已冲入油卡'
   template: require('./template.html')
   ready:->
     error.setOnErrorVm(@)
