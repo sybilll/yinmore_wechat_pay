@@ -43,6 +43,7 @@ OK = '0'
 OPENID = 'oGXiIwHwx_zB8ekXibYjdt3Xb_fE'
 OPENID = None
 
+
 class getAdminPayInfos(BaseHandler):
 
     '''
@@ -50,11 +51,17 @@ class getAdminPayInfos(BaseHandler):
     '''
     @tornado_bz.mustLogin
     @tornado_bz.handleError
-    def post(self):
+    def get(self, parm=None):
         self.set_header("Content-Type", "application/json")
-        pay_infos = public_db.getPayInfo(statuses=['payed'])
+        statuses = None
+        if parm:
+            parm = json.loads(parm)
+            statuses = parm.get('statuses')
+        pay_infos = public_db.getPayInfo(statuses=statuses)
+        print pay_infos
 
-        self.write(json.dumps({'error': '0', 'data': pay_infos}, cls=public_bz.ExtEncoder))
+        self.write(json.dumps({'error': '0', 'pay_infos': pay_infos}, cls=public_bz.ExtEncoder))
+
 
 class getPayInfos(BaseHandler):
 
@@ -64,9 +71,11 @@ class getPayInfos(BaseHandler):
     @tornado_bz.handleError
     def post(self):
         self.set_header("Content-Type", "application/json")
+        openid = self.get_secure_cookie("openid")
         pay_infos = public_db.getPayInfo(openid, ['payed'])
 
         self.write(json.dumps({'error': '0', 'data': pay_infos}, cls=public_bz.ExtEncoder))
+
 
 class login(web_bz.login):
 
@@ -124,22 +133,6 @@ class payDone(BaseHandler):
         </xml>
         '''
         self.write(success)
-
-
-class getPayInfos(BaseHandler):
-
-    '''
-    查出已支付信息
-    '''
-    @tornado_bz.handleError
-    def post(self):
-        self.set_header("Content-Type", "application/json")
-        openid = self.get_secure_cookie("openid")
-        if OPENID:
-            openid = OPENID
-        pay_infos = public_db.getPayInfo(openid)
-
-        self.write(json.dumps({'error': '0', 'data': pay_infos}, cls=public_bz.ExtEncoder))
 
 
 class get_wechat_prepay_id(BaseHandler):

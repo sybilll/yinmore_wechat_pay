@@ -15,16 +15,17 @@ module.exports =
   template: require('./template.html')
   ready:->
     error.setOnErrorVm(@)
+    @resource = @$resource('/getAdminPayInfos{/parm}')
     @getPayInfos()
     #抛出到全局去污染
     window.recharge_info = @
   methods:
     getPayInfos:->
-      $.ajax
-        url: '/getAdminPayInfos'
-        type: 'POST'
-        success: (data, status, response) =>
-          if data.error != '0'
-            throw new Error(data.error)
-          else
-            @pay_infos = data.data
+      parm = JSON.stringify
+        statuses:'payed'
+      parm = {parm: parm}
+      @resource.get().then((response) =>
+        if response.data.error != '0'
+          throw new Error(response.data.error)
+        @pay_infos = response.data.pay_infos
+      )

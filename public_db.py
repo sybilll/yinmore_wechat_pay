@@ -15,7 +15,7 @@ def getPayInfo(openid=None, statuses=None):
     if openid:
         sql += " and openid='%s' " % openid
     if statuses:
-        in_statuses = db_bz.listToInSql(statuses)
+        in_statuses = db_bz.formatToInSql(statuses)
         sql += " and status in (%s) " % in_statuses
     sql += " order by created_date desc "
     print sql
