@@ -1,30 +1,79 @@
-<table class="ui celled striped unstackable table">
-  <thead>
-    <tr>
-      <th>
-        流水
-      </th>
-      <th>
-        <i class="payment icon"></i> 油卡
-      </th>
-      <th>
-        <i class="yen icon"></i> 金额
-      </th>
-      <th>
-        时间
-      </th>
-      <th>
-        状态
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr v-for="pay_info in pay_infos">
-      <td>(%pay_info.id%)</td>
-      <td>(%pay_info.card_number%)</td>
-      <td>(%pay_info.total_fee/100%)</td>
-      <td>(% pay_info.stat_date | moment "M月D日 HH:mm:ss" %)</td>
-      <td>(% status_desc[pay_info.status] %)</td>
-    </tr>
-  </tbody>
-</table>
+<div class="ui two column grid no-select">
+  <div class="column">
+    <table class="ui celled striped unstackable table">
+      <thead>
+        <tr>
+          <th colspan="5">
+            未处理
+          </th>
+        </tr>
+        <tr>
+          <th>
+            流水
+          </th>
+          <th>
+            <i class="payment icon"></i> 油卡
+          </th>
+          <th>
+            <i class="yen icon"></i> 金额
+          </th>
+          <th>
+            时间
+          </th>
+          <th>
+            状态
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="pay_info in pay_infos">
+          <td>(%pay_info.id%)</td>
+          <td>(%pay_info.card_number%)</td>
+          <td>(%pay_info.total_fee/100%)</td>
+          <td>(% pay_info.stat_date | moment "M月D日 HH:mm:ss" %)</td>
+          <td><a @click="changeStatus(pay_info)" href="javascript:void(0)">(% status_desc[pay_info.status] %)</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="column">
+    <table class="ui celled striped unstackable table">
+      <thead>
+        <tr>
+          <th colspan="5">
+           充值中...... 
+          </th>
+        </tr>
+        <tr>
+          <th>
+            流水
+          </th>
+          <th>
+            <i class="payment icon"></i> 油卡
+          </th>
+          <th>
+            <i class="yen icon"></i> 金额
+          </th>
+          <th>
+            时间
+          </th>
+          <th>
+            状态
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="pay_info in pay_info_rechargings">
+          <td>(%pay_info.id%)</td>
+          <td>(%pay_info.card_number%)</td>
+          <td>(%pay_info.total_fee/100%)</td>
+          <td>(% pay_info.stat_date | moment "M月D日 HH:mm:ss" %)</td>
+          <td>(% status_desc[pay_info.status] %)</td>
+        </tr>
+      </tbody>
+    </table> 
+  </div>
+</div>
+
+
+

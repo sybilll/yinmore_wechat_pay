@@ -44,7 +44,7 @@ OPENID = 'oGXiIwHwx_zB8ekXibYjdt3Xb_fE'
 OPENID = None
 
 
-class getAdminPayInfos(BaseHandler):
+class pay(BaseHandler):
 
     '''
      后台管理查支付信息
@@ -61,6 +61,18 @@ class getAdminPayInfos(BaseHandler):
         print pay_infos
 
         self.write(json.dumps({'error': '0', 'pay_infos': pay_infos}, cls=public_bz.ExtEncoder))
+    @tornado_bz.mustLogin
+    @tornado_bz.handleError
+    def put(self):
+        self.set_header("Content-Type", "application/json")
+        parm = json.loads(self.request.body)
+        print parm
+        id = parm.get('id')
+        count = self.pg.update('pay', where="id=%s and status='payed' " % id, status='recharging')
+        if count != 1:
+            raise Exception('占位失败')
+        self.write(json.dumps({'error': '0'}, cls=public_bz.ExtEncoder))
+
 
 
 class getPayInfos(BaseHandler):

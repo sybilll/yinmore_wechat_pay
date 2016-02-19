@@ -18,7 +18,6 @@ def getPayInfo(openid=None, statuses=None):
         in_statuses = db_bz.formatToInSql(statuses)
         sql += " and status in (%s) " % in_statuses
     sql += " order by created_date desc "
-    print sql
     return list(pg.query(sql))
 
 
