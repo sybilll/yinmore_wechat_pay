@@ -52,7 +52,7 @@ class getAdminPayInfos(BaseHandler):
     @tornado_bz.handleError
     def post(self):
         self.set_header("Content-Type", "application/json")
-        pay_infos = public_db.getPayInfo()
+        pay_infos = public_db.getPayInfo(statuses=['payed'])
 
         self.write(json.dumps({'error': '0', 'data': pay_infos}, cls=public_bz.ExtEncoder))
 

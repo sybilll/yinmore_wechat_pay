@@ -56,18 +56,6 @@ class getAdminPayInfos(BaseHandler):
 
         self.write(json.dumps({'error': '0', 'data': pay_infos}, cls=public_bz.ExtEncoder))
 
-class getPayInfos(BaseHandler):
-
-    '''
-    查出已支付信息
-    '''
-    @tornado_bz.handleError
-    def post(self):
-        self.set_header("Content-Type", "application/json")
-        pay_infos = public_db.getPayInfo(openid, ['payed'])
-
-        self.write(json.dumps({'error': '0', 'data': pay_infos}, cls=public_bz.ExtEncoder))
-
 class login(web_bz.login):
 
     '''
@@ -137,7 +125,7 @@ class getPayInfos(BaseHandler):
         openid = self.get_secure_cookie("openid")
         if OPENID:
             openid = OPENID
-        pay_infos = public_db.getPayInfo(openid)
+        pay_infos = public_db.getPayInfo(openid, ['payed'])
 
         self.write(json.dumps({'error': '0', 'data': pay_infos}, cls=public_bz.ExtEncoder))
 
@@ -158,7 +146,7 @@ class get_wechat_prepay_id(BaseHandler):
         total_fee = data['total_fee']
         card_number = data['card_number']
 
-        out_trade_no = pg.db.insert('pay', seqname='pay_id_seq', openid=openid, total_fee=total_fee, card_number=card_number)
+        out_trade_no = pg.db.insert('pay', seqname='pay_id_seq', openid=openid, total_fee=total_fee, card_number=card_number, status='prepay')
         print 'out_trade_no=', out_trade_no
 
         weixin_pay = WeiXinPay(out_trade_no=out_trade_no, body='英茂油卡冲值:%s' % total_fee, total_fee=total_fee,
