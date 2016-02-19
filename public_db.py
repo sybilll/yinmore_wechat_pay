@@ -7,7 +7,7 @@ import db_bz
 user_oper = user_bz.UserOper(pg)
 
 
-def getPayInfo(openid=None, statuses=None):
+def getPayInfo(openid=None, statuses=None, user_id=None):
     sql = '''
     select id, card_number, stat_date, card_number, total_fee, status from pay
         where 1=1
@@ -17,6 +17,8 @@ def getPayInfo(openid=None, statuses=None):
     if statuses:
         in_statuses = db_bz.formatToInSql(statuses)
         sql += " and status in (%s) " % in_statuses
+    if user_id:
+        sql += " and user_id=%s " % user_id
     sql += " order by created_date desc "
     return list(pg.query(sql))
 

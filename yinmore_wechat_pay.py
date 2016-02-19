@@ -54,10 +54,15 @@ class pay(BaseHandler):
     def get(self, parm=None):
         self.set_header("Content-Type", "application/json")
         statuses = None
+        user_id = None
         if parm:
             parm = json.loads(parm)
             statuses = parm.get('statuses')
-        pay_infos = public_db.getPayInfo(statuses=statuses)
+            user_id = parm.get('user_id')
+            if user_id:
+                user_id=self.get_secure_cookie("user_id")
+
+        pay_infos = public_db.getPayInfo(statuses=statuses, user_id=user_id)
         print pay_infos
 
         self.write(json.dumps({'error': '0', 'pay_infos': pay_infos}, cls=public_bz.ExtEncoder))
@@ -66,9 +71,11 @@ class pay(BaseHandler):
     def put(self):
         self.set_header("Content-Type", "application/json")
         parm = json.loads(self.request.body)
-        print parm
         id = parm.get('id')
-        count = self.pg.update('pay', where="id=%s and status='payed' " % id, status='recharging')
+        status = parm.get('status')
+
+        user_id = self.get_secure_cookie("user_id")
+        count = self.pg.update('pay', where="id=%s and status<>'%s' " % (id, status), status=status, user_id=user_id)
         if count != 1:
             raise Exception('占位失败')
         self.write(json.dumps({'error': '0'}, cls=public_bz.ExtEncoder))

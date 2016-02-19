@@ -1,6 +1,6 @@
-<div class="ui two column grid no-select">
+<div class="ui two column grid">
   <div class="column">
-    <table class="ui celled striped unstackable table">
+    <table class="ui celled striped unstackable table no-select">
       <thead>
         <tr>
           <th colspan="5">
@@ -41,7 +41,7 @@
       <thead>
         <tr>
           <th colspan="5">
-           充值中...... 
+            充值中...... 
           </th>
         </tr>
         <tr>
@@ -68,7 +68,7 @@
           <td>(%pay_info.card_number%)</td>
           <td>(%pay_info.total_fee/100%)</td>
           <td>(% pay_info.stat_date | moment "M月D日 HH:mm:ss" %)</td>
-          <td>(% status_desc[pay_info.status] %)</td>
+          <td><a @click="changeStatus(pay_info)" href="javascript:void(0)">(% status_desc[pay_info.status] %)</a></td>
         </tr>
       </tbody>
     </table> 
@@ -76,4 +76,20 @@
 </div>
 
 
-
+<div v-show="current_recharged" class="ui small test modal">
+  <div class="header">
+    请仔细核查!
+  </div>
+  <div class="content">
+    <p>请核对是否确实向油卡 (%current_recharged.card_number%) 冲入了 (%current_recharged.total_fee/100%)元</p>
+  </div>
+  <div class="actions">
+    <div @click="updatePay(current_recharged, 'recharged')" class="ui positive right labeled icon button">
+      确定
+      <i class="checkmark icon"></i>
+    </div>
+    <div class="ui negative button">
+      取消
+    </div>
+  </div>
+</div>

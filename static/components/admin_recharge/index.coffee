@@ -7,6 +7,9 @@ module.exports =
   data:->
     pay_infos:null
     pay_info_rechargings:null
+    current_recharged:
+      card_number:0
+      total_fee:0
     status_desc:
       prepay: '生成订单'
       payed:'已支付'
@@ -34,6 +37,7 @@ module.exports =
     getPayInfosRecharging:->
       parm = JSON.stringify
         statuses:'recharging'
+        user_id:'need'
       parm = {parm: parm}
       @resource.get(parm).then((response) =>
         if response.data.error != '0'
@@ -42,12 +46,19 @@ module.exports =
       )
     changeStatus:(pay_info)->
       if pay_info.status == 'payed'
-        @updateToRecharging(pay_info)
-    updateToRecharging:(pay_info)->
+        @updatePay(pay_info, 'recharging')
+      if pay_info.status == 'recharging'
+        @current_recharged = pay_info
+        $('.small.modal').modal('show')
+    updatePay:(pay_info, status)->
       parm = JSON.stringify
         id:pay_info.id
-      @resource.update(parm).then((response) ->
-        console.log response.data
+        status:status
+      @resource.update(parm).then((response) =>
         if response.data.error != '0'
           top_toast.warning(response.data.error)
+        else
+          @getPayInfosRecharging()
+          @getPayInfos()
+          top_toast.info('操作成功')
       )
