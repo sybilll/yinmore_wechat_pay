@@ -54,12 +54,16 @@ module.exports =
           @name_error=true
           top_toast.warning "必须填入持卡人姓名"
           return
-        if not @bind_info.phone_number
-          @phone_number_error=true
-          top_toast.warning "必须填入手机号"
-          return
         if not @bind_info.id_number
           @id_number_error=true
+          top_toast.warning "必须填入身份证号码"
+          return
+        if @bind_info.id_number.trim().length != 18
+          @id_number_error=true
+          top_toast.warning "请输入正确的18位身份证号码"
+          return
+        if not @bind_info.phone_number
+          @phone_number_error=true
           top_toast.warning "必须填入手机号"
           return
 
