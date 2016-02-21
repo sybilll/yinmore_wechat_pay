@@ -11,7 +11,8 @@ module.exports =
     id_number_error:false
 
     bind_info:
-      name=''
+      name:''
+      car_type:"私家车"
     loading: false
     disable_edit: true # 禁止编辑
     button_text:'修改资料'

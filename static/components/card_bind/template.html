@@ -1,15 +1,19 @@
 <div class="ui center aligned segment">
   <h4 class="ui header">(%bind_info.name%)</h4>
   <form class="ui form">
-    <div v-bind:class="{ 'error': card_number_error }" class="field">
+    <div v-bind:class="{ 'error': card_number_error }" class="required field">
       <label>加油卡卡号</label>
-      <input @focus="cleanError" v-model="bind_info.card_number"  v-disable="disable_edit" type="number"  placeholder="加油卡卡号">
+      <input @focus="cleanError" v-model="bind_info.card_number"  v-disable="disable_edit"  required="required" type="number"  placeholder="加油卡卡号">
     </div>
-    <div v-bind:class="{ 'error': name_error }" class="field">
+    <div v-bind:class="{ 'error': name_error }" class="required field">
       <label>持卡人</label>
       <input @focus="cleanError" v-model="bind_info.name" v-disable="disable_edit" type="text"  placeholder="持卡人">
     </div>
-    <div v-bind:class="{ 'error': phone_number_error }" class="field">
+    <div v-bind:class="{ 'error': id_number_error }" class="required field">
+      <label>身份证号</label>
+      <input @focus="cleanError" v-model="bind_info.id_number" v-disable="disable_edit" type="text"  placeholder="身份证号">
+    </div>
+    <div v-bind:class="{ 'error': phone_number_error }" class="required field">
       <label>手机号</label>
       <input @focus="cleanError" v-model="bind_info.phone_number" v-disable="disable_edit" type="text"  placeholder="手机号">
     </div>
@@ -21,17 +25,13 @@
     <div class="field">
       <label>车型</label>
       <select v-model="bind_info.car_type" v-disable="disable_edit" class="ui fluid dropdown">
-        <option>私家车</option>
+        <option selected="selected">私家车</option>
         <option>出租车</option>
         <option>驾培车</option>
         <option>公车</option>
         <option>货车</option>
         <option>摩托车</option>
       </select>
-    </div>
-    <div v-bind:class="{ 'error': id_number_error }" class="field">
-      <label>身份证号</label>
-      <input @focus="cleanError" v-model="bind_info.id_number" v-disable="disable_edit" type="text"  placeholder="身份证号">
     </div>
   </form>
   <div class="ui center aligned basic segment">
