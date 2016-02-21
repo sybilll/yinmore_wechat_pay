@@ -32,6 +32,7 @@ module.exports =
           else
             if data.data
               @bind_info = data.data
+              @disable()
             else
               @enable()
     enable:->
