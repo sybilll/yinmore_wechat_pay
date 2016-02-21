@@ -60,12 +60,13 @@ class pay(BaseHandler):
             statuses = parm.get('statuses')
             user_id = parm.get('user_id')
             if user_id:
-                user_id=self.get_secure_cookie("user_id")
+                user_id = self.get_secure_cookie("user_id")
 
         pay_infos = public_db.getPayInfo(statuses=statuses, user_id=user_id)
         print pay_infos
 
         self.write(json.dumps({'error': '0', 'pay_infos': pay_infos}, cls=public_bz.ExtEncoder))
+
     @tornado_bz.mustLogin
     @tornado_bz.handleError
     def put(self):
@@ -81,7 +82,6 @@ class pay(BaseHandler):
         self.write(json.dumps({'error': '0'}, cls=public_bz.ExtEncoder))
 
 
-
 class getPayInfos(BaseHandler):
 
     '''
@@ -91,7 +91,7 @@ class getPayInfos(BaseHandler):
     def post(self):
         self.set_header("Content-Type", "application/json")
         openid = self.get_secure_cookie("openid")
-        pay_infos = public_db.getPayInfo(openid, ['payed'])
+        pay_infos = public_db.getPayInfo(openid, ['payed', 'recharging', 'recharged'])
 
         self.write(json.dumps({'error': '0', 'data': pay_infos}, cls=public_bz.ExtEncoder))
 
