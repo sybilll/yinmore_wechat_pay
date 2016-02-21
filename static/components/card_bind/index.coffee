@@ -38,10 +38,10 @@ module.exports =
               @enable()
     enable:->
         @disable_edit = false
-        $(@$el).find(".basic.button").html('<i class="icon save"></i>保存')
+        $(@$el).find(".ui.orange.button").html('<i class="icon save"></i>保存')
     disable:->
         @disable_edit=true
-        $(@$el).find(".basic.button").html('<i class="icon file text"></i>编辑')
+        $(@$el).find(".ui.orange.button").html('<i class="icon file text"></i>编辑')
     save:->
       if @disable_edit
         @enable()

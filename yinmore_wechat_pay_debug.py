@@ -41,7 +41,7 @@ from xml2json import xml2json
 OK = '0'
 
 OPENID = 'oGXiIwHwx_zB8ekXibYjdt3Xb_fE'
-#OPENID = None
+#OPENID = '1'
 
 
 class pay(BaseHandler):
