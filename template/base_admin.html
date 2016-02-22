@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title %}英茂充值系统{% end %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="description" content="{% block description %}权威官方的充值系统 created by bigzhu{% end %}" />
+    <meta name="keywords" content="{% block keywords %}bigzhu,充值{% end %}" />
+
+    <link rel='shortcut icon' href='/static/images/login-logo.png' />
+    <!--
+      <link href="/static/semantic/dist/semantic.min.css" type="text/css" rel="stylesheet"/>
+    -->
+    <link href="//libs.cncdn.cn/semantic-ui/2.1.4/semantic.min.css" type="text/css" rel="stylesheet"/>
+    <link href="//cdn.bootcss.com/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
+    {% block css %}
+    {% end %}
+  </head>
+  <body class="skin-black layout-top-nav">
+    <header id="v_header" class="main-header">               
+      <nav class="ui top fixed pointing menu">
+        <a class="header item" href="/"><b>英茂冲值管理</b></a>
+        <a href="/" class="item">
+          待处理充值
+        </a>
+        <a href="/" class="item">
+          处理日报
+        </a>
+      </nav>
+    </header>
+
+    <br>
+    <div class="ui main container">
+      {% block body %}
+      {% end %}
+    </div>
+
+    <script src="//cdn.bootcss.com/vue/1.0.15/vue.js"></script>
+    <script src="//cdn.bootcss.com/vue-router/0.7.7/vue-router.js"></script>
+    <script src="//cdn.bootcss.com/underscore.js/1.8.3/underscore-min.js"></script>
+
+    <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="//libs.cncdn.cn/semantic-ui/2.1.4/semantic.min.js"></script>
+    <script src="//cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
+    {% block js %}
+    {% end %}
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+  </body>
+</html>

@@ -11,7 +11,8 @@ module.exports =
     id_number_error:false
 
     bind_info:
-      name=''
+      name:''
+      car_type:"私家车"
     loading: false
     disable_edit: true # 禁止编辑
     button_text:'修改资料'
@@ -32,14 +33,15 @@ module.exports =
           else
             if data.data
               @bind_info = data.data
+              @disable()
             else
               @enable()
     enable:->
         @disable_edit = false
-        $(@$el).find(".basic.button").html('<i class="icon save"></i>保存')
+        $(@$el).find(".ui.orange.button").html('<i class="icon save"></i>保存')
     disable:->
         @disable_edit=true
-        $(@$el).find(".basic.button").html('<i class="icon file text"></i>编辑')
+        $(@$el).find(".ui.orange.button").html('<i class="icon file text"></i>编辑')
     save:->
       if @disable_edit
         @enable()
@@ -52,12 +54,16 @@ module.exports =
           @name_error=true
           top_toast.warning "必须填入持卡人姓名"
           return
-        if not @bind_info.phone_number
-          @phone_number_error=true
-          top_toast.warning "必须填入手机号"
-          return
         if not @bind_info.id_number
           @id_number_error=true
+          top_toast.warning "必须填入身份证号码"
+          return
+        if @bind_info.id_number.trim().length != 18
+          @id_number_error=true
+          top_toast.warning "请输入正确的18位身份证号码"
+          return
+        if not @bind_info.phone_number
+          @phone_number_error=true
           top_toast.warning "必须填入手机号"
           return
 

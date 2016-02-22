@@ -1,4 +1,4 @@
-require './app.less'
+require './admin.less'
 
 Vue = require './vue_local.coffee'
 

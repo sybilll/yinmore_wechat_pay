@@ -41,20 +41,46 @@ from xml2json import xml2json
 OK = '0'
 
 OPENID = 'oGXiIwHwx_zB8ekXibYjdt3Xb_fE'
-#OPENID = None
+#OPENID = '1'
 
-class getAdminPayInfos(BaseHandler):
+
+class pay(BaseHandler):
 
     '''
      后台管理查支付信息
     '''
     @tornado_bz.mustLogin
     @tornado_bz.handleError
-    def post(self):
+    def get(self, parm=None):
         self.set_header("Content-Type", "application/json")
-        pay_infos = public_db.getPayInfo()
+        statuses = None
+        user_id = None
+        if parm:
+            parm = json.loads(parm)
+            statuses = parm.get('statuses')
+            user_id = parm.get('user_id')
+            if user_id:
+                user_id = self.get_secure_cookie("user_id")
 
-        self.write(json.dumps({'error': '0', 'data': pay_infos}, cls=public_bz.ExtEncoder))
+        pay_infos = public_db.getPayInfo(statuses=statuses, user_id=user_id)
+        print pay_infos
+
+        self.write(json.dumps({'error': '0', 'pay_infos': pay_infos}, cls=public_bz.ExtEncoder))
+
+    @tornado_bz.mustLogin
+    @tornado_bz.handleError
+    def put(self):
+        self.set_header("Content-Type", "application/json")
+        parm = json.loads(self.request.body)
+        id = parm.get('id')
+        status = parm.get('status')
+
+        user_id = self.get_secure_cookie("user_id")
+        count = self.pg.update('pay', where="id=%s and status<>'%s' " % (id, status), status=status, user_id=user_id)
+        if count != 1:
+            raise Exception('占位失败')
+        self.write(json.dumps({'error': '0'}, cls=public_bz.ExtEncoder))
+
 
 class getPayInfos(BaseHandler):
 
@@ -64,9 +90,11 @@ class getPayInfos(BaseHandler):
     @tornado_bz.handleError
     def post(self):
         self.set_header("Content-Type", "application/json")
-        pay_infos = public_db.getPayInfo(openid, ['payed'])
+        openid = self.get_secure_cookie("openid")
+        pay_infos = public_db.getPayInfo(openid, ['payed', 'recharging', 'recharged'])
 
         self.write(json.dumps({'error': '0', 'data': pay_infos}, cls=public_bz.ExtEncoder))
+
 
 class login(web_bz.login):
 
@@ -126,22 +154,6 @@ class payDone(BaseHandler):
         self.write(success)
 
 
-class getPayInfos(BaseHandler):
-
-    '''
-    查出已支付信息
-    '''
-    @tornado_bz.handleError
-    def post(self):
-        self.set_header("Content-Type", "application/json")
-        openid = self.get_secure_cookie("openid")
-        if OPENID:
-            openid = OPENID
-        pay_infos = public_db.getPayInfo(openid)
-
-        self.write(json.dumps({'error': '0', 'data': pay_infos}, cls=public_bz.ExtEncoder))
-
-
 class get_wechat_prepay_id(BaseHandler):
 
     '''
@@ -158,7 +170,7 @@ class get_wechat_prepay_id(BaseHandler):
         total_fee = data['total_fee']
         card_number = data['card_number']
 
-        out_trade_no = pg.db.insert('pay', seqname='pay_id_seq', openid=openid, total_fee=total_fee, card_number=card_number)
+        out_trade_no = pg.db.insert('pay', seqname='pay_id_seq', openid=openid, total_fee=total_fee, card_number=card_number, status='prepay')
         print 'out_trade_no=', out_trade_no
 
         weixin_pay = WeiXinPay(out_trade_no=out_trade_no, body='英茂油卡冲值:%s' % total_fee, total_fee=total_fee,
