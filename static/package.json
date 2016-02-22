@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "main": "main.coffee",
   "scripts": {
-    "server": "webpack-dev-server --devtool eval --progress --content-base build",
-    "min": "webpack --progress --watch --optimize-minimize --optimize-dedupe",
-    "dev": "webpack --progress --watch"
+    "server": "webpack-dev-server --devtool eval --progress --colors --content-base build",
+    "min": "webpack --progress --watch --colors --optimize-minimize --optimize-dedupe",
+    "dev": "webpack --progress --watch --colors"
   },
   "author": "",
   "license": "ISC",
