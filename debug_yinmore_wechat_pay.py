@@ -5,7 +5,7 @@ import json
 import public_bz
 import sys
 import db_bz
-import wechat_bz
+# import wechat_bz
 
 #import db_bz
 import tornado.ioloop
@@ -42,6 +42,22 @@ OK = '0'
 
 OPENID = 'oGXiIwHwx_zB8ekXibYjdt3Xb_fE'
 #OPENID = '1'
+
+
+class api_pay(BaseHandler):
+
+    '''
+    查出已支付信息
+    '''
+    @tornado_bz.handleError
+    def get(self):
+        self.set_header("Content-Type", "application/json")
+        openid = self.get_secure_cookie("openid")
+        pay_infos = public_db.getPayInfo(openid, ['payed', 'recharging', 'recharged'])
+
+        self.write(json.dumps({'error': '0', 'pay_infos': pay_infos}, cls=public_bz.ExtEncoder))
+
+
 class api_card(BaseHandler):
 
     @tornado_bz.handleError
@@ -53,7 +69,6 @@ class api_card(BaseHandler):
         cards = public_db.getBindInfoByOpenid(openid)
 
         self.write(json.dumps({'error': '0', 'cards': cards}, cls=public_bz.ExtEncoder))
-
 
 
 class pay(BaseHandler):
@@ -238,6 +253,7 @@ class app(BaseHandler):
     '''
 
     #@wechat_bz.mustSubscribe
+
     def get(self):
         #openid = self.get_secure_cookie("openid")
         # wechat_oper.addWechatUser(openid)

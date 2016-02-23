@@ -44,6 +44,20 @@ OPENID = 'oGXiIwHwx_zB8ekXibYjdt3Xb_fE'
 OPENID = None
 
 
+class api_pay(BaseHandler):
+
+    '''
+    查出已支付信息
+    '''
+    @tornado_bz.handleError
+    def get(self):
+        self.set_header("Content-Type", "application/json")
+        openid = self.get_secure_cookie("openid")
+        pay_infos = public_db.getPayInfo(openid, ['payed', 'recharging', 'recharged'])
+
+        self.write(json.dumps({'error': '0', 'pay_infos': pay_infos}, cls=public_bz.ExtEncoder))
+
+
 class api_card(BaseHandler):
 
     @tornado_bz.handleError

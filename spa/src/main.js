@@ -1,8 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import VueMoment from 'vue-moment'
 import App from './App.vue'
 
 Vue.use(VueRouter)
+Vue.use(VueMoment)
 
 Vue.config.debug = true
 /* eslint-disable no-new */

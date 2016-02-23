@@ -29,7 +29,7 @@
         </button>
       </div>
     </div>
-    <recharge_info></recharge_info>
+    <pay-info></pay-info>
   </div>
 </template>
 
@@ -45,6 +45,7 @@
   import $ from 'jquery'
   import _ from 'underscore'
   import BindInfo from './BindInfo.vue'
+  import PayInfo from './PayInfo.vue'
   export default {
     data: function () {
       return {
@@ -55,7 +56,7 @@
     },
     components: {
       BindInfo,
-      'recharge_info': require('../../../static/components/recharge_info')
+      PayInfo
     },
     ready: function () {
       return error.setOnErrorVm(this)
