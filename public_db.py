@@ -79,6 +79,27 @@ def getBindInfoByOpenid(openid):
     return pg.query(sql)
 
 
+def getCardinfos(openid=None, id=None):
+    sql = '''
+        select b.id,
+            b.openid,
+            b.card_number,
+            b.car_number,
+            b.car_type,   -- 车型
+            b.phone_number, -- 手机号
+            b.name,  -- 姓名
+            b.id_number   -- 身份证号
+         from bind_card_info b
+         where b.openid='%s'
+    ''' % openid
+    if openid:
+        sql += " and b.openid='%s' " % openid
+    if id:
+        sql += " and b.id=%s " % id
+
+    return pg.query(sql)
+
+
 def getWechatUserBindInfoByOpenid(openid):
     '''
     查出用户信息

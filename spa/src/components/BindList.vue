@@ -1,6 +1,9 @@
 <style lang="less">
+  .remove.icon {
+    color:red;
+  }
   img {
-    width: 100%
+    width: 100%;
   }
 </style>
 
@@ -9,25 +12,21 @@
     <thead>
       <tr>
         <th>
-          选择
-        </th>
-        <th>
           <i class="user icon"></i>持卡人
         </th>
         <th>
           <i class="payment icon"></i>卡号
         </th>
+        <th>
+          解绑
+        </th>
       </tr>
     </thead>
     <tbody>
       <tr v-for="card in cards">
-        <td>
-          <input v-model="selected_card_number" @click="selectCard(card)" :value="card.card_number" type="radio" name="fruit" tabindex="0" class="hidden">
-        </td>
-        <td>
-          {{card.name}}
-        </td>
-        <td>{{card.card_number}}</td>
+        <td><a href="/#!/CardDetail/{{card.id}}">{{card.name}}</a></td>
+        <td><a href="/#!/CardDetail/{{card.id}}">{{card.card_number}}</a></td>
+        <td><a href="javascript:;"><i class="remove icon"></i></a></td>
       </tr>
     </tbody>
   </table>

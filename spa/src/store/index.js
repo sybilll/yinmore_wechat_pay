@@ -7,6 +7,9 @@ import mutations from './mutations'
 Vue.use(Vuex)
 
 const state = {
+  loading: false,
+  card_detail: {}, // 显示待编辑的详情
+  selected_card: {}, // 充值时候选中的油卡
   pay_infos: [],
   cards: []
 }

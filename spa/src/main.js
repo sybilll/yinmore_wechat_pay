@@ -19,13 +19,16 @@ new Vue(
 )
 
 var router = new VueRouter()
+window.router = router
 import Recharge from './components/Recharge.vue'
+import BindList from './components/BindList.vue'
+import CardDetail from './components/CardDetail.vue'
 
 router.map(
   {
-    '/': {
-      component: Recharge
-    }
+    '/': { component: Recharge },
+    '/CardDetail/:id': { component: CardDetail },
+    '/BindList': { component: BindList }
   }
 )
 router.start(App, '#app')

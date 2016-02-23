@@ -1,7 +1,4 @@
 <style less>
-  .main.container {
-    margin-bottom: 4em;
-  }
 </style>
 
 <template>

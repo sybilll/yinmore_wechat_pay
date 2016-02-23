@@ -61,14 +61,33 @@ class api_pay(BaseHandler):
 class api_card(BaseHandler):
 
     @tornado_bz.handleError
-    def get(self):
+    def get(self, parm=None):
         self.set_header("Content-Type", "application/json")
+
+        id = None
+        if parm:
+            parm = json.loads(parm)
+            id = parm.get('id')
+
         openid = self.get_secure_cookie("openid")
         if OPENID:
             openid = OPENID
-        cards = public_db.getBindInfoByOpenid(openid)
+        cards = public_db.getCardinfos(openid=openid, id=id)
 
         self.write(json.dumps({'error': '0', 'cards': cards}, cls=public_bz.ExtEncoder))
+    @tornado_bz.handleError
+    def put(self):
+        self.set_header("Content-Type", "application/json")
+        parm = json.loads(self.request.body)
+        id = parm['id']
+        openid = self.get_secure_cookie("openid")
+        if OPENID:
+            openid = OPENID
+        where = " id=%s and openid='%s' " %(id, openid)
+        count = pg.update('bind_card_info', where=where, **parm)
+        if count != 1:
+            raise Exception("更新失败，更新记录 %s 条" % count)
+        self.write(json.dumps({'error': '0'}, cls=public_bz.ExtEncoder))
 
 
 class pay(BaseHandler):
