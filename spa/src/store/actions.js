@@ -13,7 +13,6 @@ export default {
   queryPayInfos: ({ dispatch, state }) => {
     api_pay.get().then(
       function (response) {
-        console.log(response.data)
         dispatch('SET_PAY_INFOS', response.data.pay_infos)
       },
       function (response) {
@@ -27,7 +26,11 @@ export default {
     // parm = {parm: parm}
     api_card.get().then(
       function (response) {
-        dispatch('SET_CARDS', response.data.cards)
+        if (response.data.cards.length === 0) {
+          dispatch('SHOW_CARD_NO_BIND_WARING')
+        } else {
+          dispatch('SET_CARDS', response.data.cards)
+        }
       },
       function (response) {
       }

@@ -9,6 +9,9 @@
     <thead>
       <tr>
         <th>
+          选择
+        </th>
+        <th>
           <i class="user icon"></i>持卡人
         </th>
         <th>
@@ -18,6 +21,9 @@
     </thead>
     <tbody>
       <tr v-for="card in cards">
+        <td>
+          <input type="radio" name="fruit" checked="" tabindex="0" class="hidden">
+        </td>
         <td>
           {{card.name}}
         </td>
