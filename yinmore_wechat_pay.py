@@ -44,6 +44,33 @@ OPENID = 'oGXiIwHwx_zB8ekXibYjdt3Xb_fE'
 OPENID = None
 
 
+class api_wexin_prepay(BaseHandler):
+
+    '''
+    取得统一下单id
+    '''
+    @tornado_bz.handleError
+    def get(self, parm):
+        self.set_header("Content-Type", "application/json")
+        openid = self.get_secure_cookie("openid")
+        if OPENID:
+            openid = OPENID
+        remote_ip = self.request.remote_ip
+
+        data = json.loads(parm)
+        total_fee = data['total_fee']
+        card_number = data['card_number']
+
+        out_trade_no = pg.db.insert('pay', seqname='pay_id_seq', openid=openid, total_fee=total_fee, card_number=card_number, status='prepay')
+        print 'out_trade_no=', out_trade_no
+
+        weixin_pay = WeiXinPay(out_trade_no=out_trade_no, body='英茂油卡冲值:%s' % total_fee, total_fee=total_fee,
+                               spbill_create_ip=remote_ip, openid=openid)
+
+        prepay = weixin_pay.get_prepay_id()
+        self.write(json.dumps({'error': '0', 'prepay': prepay}, cls=public_bz.ExtEncoder))
+
+
 class api_pay(BaseHandler):
 
     '''
@@ -279,6 +306,7 @@ class save_wechat_bind_info(BaseHandler):
 class set_openid(web_bz.set_openid):
     pass
 
+
 class subscribe(BaseHandler):
 
     '''
@@ -291,7 +319,7 @@ class subscribe(BaseHandler):
         # wechat_oper.addWechatUser(openid)
         # print openid
         self.redirect('/app/#!/Recharge')
-        #self.render(tornado_bz.getTName(self))
+        # self.render(tornado_bz.getTName(self))
 
 
 class callback(BaseHandler):

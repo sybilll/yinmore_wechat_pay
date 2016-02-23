@@ -12,8 +12,8 @@ Vue.config.debug = true
 //   leaveClass: 'slideOutRight'
 // })
 Vue.transition('slide', {
-  enterClass: 'bounceInLeft',
-  leaveClass: 'bounceOutRight'
+  enterClass: 'bounceInRight',
+  leaveClass: 'zoomOutLeft'
 })
 var router = new VueRouter()
 window.router = router
