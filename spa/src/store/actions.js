@@ -14,6 +14,21 @@ var api_wexin_prepay = Vue.resource('/api_wexin_prepay{/parm}')
 
 export default {
   setLoading: 'SET_LOADING',
+  unbindCard: ({ dispatch, state, actions }, id) => {
+    let api_card = Vue.resource(`/api_card/${id}`)
+    api_card.delete().then(
+      function (response) {
+        dispatch('SET_LOADING', false)
+        if (response.data.error !== '0') {
+          throw new Error(response.data.error)
+        } else {
+          actions.queryCards()
+        }
+      },
+      function (response) {
+      }
+    )
+  },
   updateCardDetail: ({ dispatch, state }, parm) => {
     parm = JSON.stringify(parm)
     api_card.update(parm).then(

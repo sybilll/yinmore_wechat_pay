@@ -90,8 +90,8 @@ def getCardinfos(openid=None, id=None):
             b.name,  -- 姓名
             b.id_number   -- 身份证号
          from bind_card_info b
-         where b.openid='%s'
-    ''' % openid
+         where is_delete=0
+    '''
     if openid:
         sql += " and b.openid='%s' " % openid
     if id:

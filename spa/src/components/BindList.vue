@@ -26,7 +26,7 @@
       <tr v-for="card in cards">
         <td><a href="/#!/CardDetail/{{card.id}}">{{card.name}}</a></td>
         <td><a href="/#!/CardDetail/{{card.id}}">{{card.card_number}}</a></td>
-        <td><a href="javascript:;"><i class="remove icon"></i></a></td>
+        <td><a @click="unbind(card)" href="javascript:;"><i class="remove icon"></i></a></td>
       </tr>
     </tbody>
   </table>
@@ -64,6 +64,9 @@
     methods: {
       selectCard: function (card) {
         store.actions.setSelectedCard(card)
+      },
+      unbind: function (card) {
+        store.actions.unbindCard(card.id)
       },
       jump: function () {
         window.location.hash = '#!/card_manager'

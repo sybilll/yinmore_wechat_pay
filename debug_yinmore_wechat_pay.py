@@ -117,6 +117,19 @@ class api_card(BaseHandler):
             raise Exception("更新失败，更新记录 %s 条" % count)
         self.write(json.dumps({'error': '0'}, cls=public_bz.ExtEncoder))
 
+    @tornado_bz.handleError
+    def delete(self, id):
+        self.set_header("Content-Type", "application/json")
+        print id
+        openid = self.get_secure_cookie("openid")
+        if OPENID:
+            openid = OPENID
+        where = " id=%s and openid='%s' " % (id, openid)
+        count = pg.update('bind_card_info', where=where, is_delete=1)
+        if count != 1:
+            raise Exception("更新失败，更新记录 %s 条" % count)
+        self.write(json.dumps({'error': '0'}, cls=public_bz.ExtEncoder))
+
 
 class pay(BaseHandler):
 
@@ -399,6 +412,8 @@ if __name__ == "__main__":
     print port
 
     url_map = tornado_bz.getURLMap(web_class)
+    for i in url_map:
+        print i
     # 机器人
     url_map.append((r'/robots.txt()', tornado.web.StaticFileHandler, {'path': "./static/robots.txt"}))
     # sitemap
