@@ -81,6 +81,8 @@ class api_pay(BaseHandler):
         self.set_header("Content-Type", "application/json")
         openid = self.get_secure_cookie("openid")
         pay_infos = public_db.getPayInfo(openid, ['payed', 'recharging', 'recharged'])
+        for pay_info in pay_infos:
+            pay_info['date'] = pay_info.stat_date.strftime("%m-%d %H:%M")
 
         self.write(json.dumps({'error': '0', 'pay_infos': pay_infos}, cls=public_bz.ExtEncoder))
 
@@ -151,7 +153,6 @@ class pay(BaseHandler):
                 user_id = self.get_secure_cookie("user_id")
 
         pay_infos = public_db.getPayInfo(statuses=statuses, user_id=user_id)
-        print pay_infos
 
         self.write(json.dumps({'error': '0', 'pay_infos': pay_infos}, cls=public_bz.ExtEncoder))
 

@@ -1,19 +1,19 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import VueMoment from 'vue-moment'
+// import VueMoment from 'vue-moment'
 import App from './App.vue'
 
 Vue.use(VueRouter)
-Vue.use(VueMoment)
+// Vue.use(VueMoment)
 
 Vue.config.debug = true
 // Vue.transition('slide', {
 //   enterClass: 'slideInRight',
 //   leaveClass: 'slideOutRight'
 // })
-Vue.transition('slide', {
-  enterClass: 'bounceInRight',
-  leaveClass: 'zoomOutLeft'
+Vue.transition('fade', {
+  enterClass: 'fadeIn',
+  leaveClass: 'fadeOut'
 })
 var router = new VueRouter()
 window.router = router
