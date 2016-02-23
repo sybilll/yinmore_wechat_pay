@@ -7,7 +7,14 @@ Vue.use(VueRouter)
 Vue.use(VueMoment)
 
 Vue.config.debug = true
-
+// Vue.transition('slide', {
+//   enterClass: 'slideInRight',
+//   leaveClass: 'slideOutRight'
+// })
+Vue.transition('slide', {
+  enterClass: 'bounceInLeft',
+  leaveClass: 'bounceOutRight'
+})
 var router = new VueRouter()
 window.router = router
 import Recharge from './components/Recharge.vue'
