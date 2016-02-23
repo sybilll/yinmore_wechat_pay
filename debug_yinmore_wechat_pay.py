@@ -42,6 +42,18 @@ OK = '0'
 
 OPENID = 'oGXiIwHwx_zB8ekXibYjdt3Xb_fE'
 #OPENID = '1'
+class api_card(BaseHandler):
+
+    @tornado_bz.handleError
+    def get(self):
+        self.set_header("Content-Type", "application/json")
+        openid = self.get_secure_cookie("openid")
+        if OPENID:
+            openid = OPENID
+        cards = public_db.getBindInfoByOpenid(openid)
+
+        self.write(json.dumps({'error': '0', 'cards': cards}, cls=public_bz.ExtEncoder))
+
 
 
 class pay(BaseHandler):
@@ -320,7 +332,7 @@ if __name__ == "__main__":
     if len(sys.argv) == 2:
         port = int(sys.argv[1])
     else:
-        port = 9000
+        port = 8000
     print port
 
     url_map = tornado_bz.getURLMap(web_class)

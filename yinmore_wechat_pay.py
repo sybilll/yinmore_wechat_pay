@@ -44,6 +44,19 @@ OPENID = 'oGXiIwHwx_zB8ekXibYjdt3Xb_fE'
 OPENID = None
 
 
+class api_card(BaseHandler):
+
+    @tornado_bz.handleError
+    def get(self):
+        self.set_header("Content-Type", "application/json")
+        openid = self.get_secure_cookie("openid")
+        if OPENID:
+            openid = OPENID
+        cards = public_db.getBindInfoByOpenid(openid)
+
+        self.write(json.dumps({'error': '0', 'cards': cards}, cls=public_bz.ExtEncoder))
+
+
 class pay(BaseHandler):
 
     '''

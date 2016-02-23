@@ -7,7 +7,7 @@ App = Vue.extend({})
 router = new VueRouter()
 
 router.map
-  '/card_manager': component: require('./components/card_manager')
   '/': component: require('./components/card_recharge')
+  '/card_manager': component: require('./components/card_manager')
 
 router.start(App, '#app')
