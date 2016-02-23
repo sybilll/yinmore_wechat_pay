@@ -1,21 +1,23 @@
-<bind_info :card_number.sync="card_number" ></bind_info>
+<div>
+  <bind_info :card_number.sync="card_number" ></bind_info>
 
-<div class="ui center aligned segment">
+  <div class="ui center aligned segment">
     <h4 class="ui header">请选择/填入充值金额</h4>
     <div @click="setAndPay(500)" class="ui yellow button">500</div>
     <div @click="setAndPay(1000)" class="ui yellow button">1000</div>
     <div @click="setAndPay(5000)" class="ui yellow button">5000</div>
     <form class="ui form">
-        <div v-bind:class="{ 'error': total_fee_error }" class="field">
-            <label></label>
-            <input @focus="cleanError" v-model="total_fee" type="number"  placeholder="充值金额">
-        </div>
+      <div v-bind:class="{ 'error': total_fee_error }" class="field">
+        <label></label>
+        <input @focus="cleanError" v-model="total_fee" type="number"  placeholder="充值金额">
+      </div>
     </form>
     <div class="ui center aligned basic segment">
-        <button @click="pay" v-bind:class="{ 'disabled': loading, 'loading': loading }"class="ui orange basic button">
-            <i class="yen icon"></i>
-            充值
-        </button>
+      <button @click="pay" v-bind:class="{ 'disabled': loading, 'loading': loading }"class="ui orange basic button">
+        <i class="yen icon"></i>
+        充值
+      </button>
     </div>
+  </div>
+  <recharge_info></recharge_info>
 </div>
-<recharge_info></recharge_info>
