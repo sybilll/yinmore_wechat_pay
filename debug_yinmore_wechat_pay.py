@@ -306,19 +306,19 @@ class set_openid(web_bz.set_openid):
     pass
 
 
-class app(BaseHandler):
-
-    '''
-    主程序
-    '''
-
-    #@wechat_bz.mustSubscribe
-
-    def get(self):
-        #openid = self.get_secure_cookie("openid")
-        # wechat_oper.addWechatUser(openid)
-        # print openid
-        self.render(tornado_bz.getTName(self))
+#class app(BaseHandler):
+#
+#    '''
+#    主程序
+#    '''
+#
+#    #@wechat_bz.mustSubscribe
+#
+#    def get(self):
+#        #openid = self.get_secure_cookie("openid")
+#        # wechat_oper.addWechatUser(openid)
+#        # print openid
+#        self.render(tornado_bz.getTName(self))
 
 
 class callback(BaseHandler):
@@ -419,7 +419,7 @@ if __name__ == "__main__":
     # sitemap
     url_map.append((r'/sitemap.xml()', tornado.web.StaticFileHandler, {'path': "./static/sitemap.xml"}))
     #url_map.append((r'/static/(.*)', tornado.web.StaticFileHandler, {'path': "./static"}))
-
+    url_map.append((r"/app/(.*)", tornado.web.StaticFileHandler, {"path": "./spa/", "default_filename": "index.html"}))
     url_map.append((r'/', admin))
 
     settings = tornado_bz.getSettings()

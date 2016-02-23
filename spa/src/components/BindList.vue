@@ -24,8 +24,8 @@
     </thead>
     <tbody>
       <tr v-for="card in cards">
-        <td><a href="/#!/CardDetail/{{card.id}}">{{card.name}}</a></td>
-        <td><a href="/#!/CardDetail/{{card.id}}">{{card.card_number}}</a></td>
+        <td><a v-link="{ name: 'CardDetail', params: { id: card.id }}">{{card.name}}</a></td>
+        <td><a v-link="{ name: 'CardDetail', params: { id: card.id }}">{{card.card_number}}</a></td>
         <td><a @click="showConfirm(card)" href="javascript:;"><i class="remove icon"></i></a></td>
       </tr>
     </tbody>
@@ -68,10 +68,11 @@
   var error = require('lib/functions/error.coffee')
 
   import store from '../store'
+  import $ from 'jquery'
   export default {
     data: function () {
       return {
-        remove_card:{}
+        remove_card: {}
       }
     },
     computed: {

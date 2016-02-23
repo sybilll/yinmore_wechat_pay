@@ -279,11 +279,10 @@ class save_wechat_bind_info(BaseHandler):
 class set_openid(web_bz.set_openid):
     pass
 
-
-class app(BaseHandler):
+class subscribe(BaseHandler):
 
     '''
-    主程序
+    create by bigzhu at 16/02/23 22:02:51 确定已经登录
     '''
 
     @wechat_bz.mustSubscribe
@@ -291,7 +290,8 @@ class app(BaseHandler):
         #openid = self.get_secure_cookie("openid")
         # wechat_oper.addWechatUser(openid)
         # print openid
-        self.render(tornado_bz.getTName(self))
+        self.redirect('/app/#!/Recharge')
+        #self.render(tornado_bz.getTName(self))
 
 
 class callback(BaseHandler):
@@ -390,7 +390,7 @@ if __name__ == "__main__":
     # sitemap
     url_map.append((r'/sitemap.xml()', tornado.web.StaticFileHandler, {'path': "./static/sitemap.xml"}))
     #url_map.append((r'/static/(.*)', tornado.web.StaticFileHandler, {'path': "./static"}))
-    url_map.append((r"/(.*)", tornado.web.StaticFileHandler, {"path": "./spa/", "default_filename": "index.html"}))
+    url_map.append((r"/app/(.*)", tornado.web.StaticFileHandler, {"path": "./spa/", "default_filename": "index.html"}))
 
     url_map.append((r'/', admin))
 

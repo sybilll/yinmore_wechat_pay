@@ -7,16 +7,6 @@ Vue.use(VueRouter)
 Vue.use(VueMoment)
 
 Vue.config.debug = true
-/* eslint-disable no-new */
-new Vue(
-  {
-    el: '#v_header',
-    data () {
-    },
-    methods: {
-    }
-  }
-)
 
 var router = new VueRouter()
 window.router = router
@@ -26,9 +16,9 @@ import CardDetail from './components/CardDetail.vue'
 
 router.map(
   {
-    '/': { component: Recharge },
-    '/CardDetail/:id': { component: CardDetail },
-    '/BindList': { component: BindList }
+    '/Recharge': { name: 'Recharge', component: Recharge },
+    '/CardDetail/:id': {name: 'CardDetail', component: CardDetail },
+    '/BindList': {name: 'BindList', component: BindList }
   }
 )
 router.start(App, '#app')
