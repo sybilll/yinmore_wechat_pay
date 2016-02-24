@@ -48,7 +48,7 @@ export default {
       }
     )
   },
-  weixinPay: ({ dispatch, state }, parm) => {
+  weixinPay: ({ dispatch, state, actions }, parm) => {
     parm = JSON.stringify(parm)
     parm = {parm: parm}
     api_wexin_prepay.get(parm).then(
@@ -70,7 +70,8 @@ export default {
           WeixinJSBridge.invoke(
             'getBrandWCPayRequest', weixin_parm, function (res) {
               if (res.err_msg === 'get_brand_wcpay_request:ok') {
-                _.delay(window.recharge_info.getPayInfos, 3000)
+                // _.delay(window.recharge_info.getPayInfos, 3000)
+                _.delay(actions.queryPayInfos, 3000)
               } else {
                 alert(res.err_code + res.err_desc)
                 console.log(res.err_code + res.err_desc)
@@ -100,8 +101,14 @@ export default {
     parm = {parm: parm}
     api_card.get(parm).then(
       function (response) {
-        if (response.data.cards.length === 0) {
+        if (response.data.error !== '0') {
           toast.error(response.data.error)
+          throw new Error(response.data.error)
+
+        }
+
+        if (response.data.cards.length === 0) {
+          toast.error('没有查到数据')
           throw new Error('没有查到数据')
         } else {
           dispatch('SET_CARD_DETAIL', response.data.cards[0])
