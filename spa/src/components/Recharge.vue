@@ -10,7 +10,6 @@
 <template>
   <div>
     <bind-info></bind-info>
-
     <div class='ui center aligned segment'>
       <h4 class='ui header'>请选择/填入充值金额</h4>
       <div @click='setAndPay(500)' class='ui yellow button'>500</div>
@@ -30,6 +29,7 @@
       </div>
     </div>
     <pay-info></pay-info>
+    <confirm header="确定向该油卡充值？" :content="content">
   </div>
 </template>
 
@@ -44,6 +44,7 @@
   import store from '../store'
   import BindInfo from './BindInfo.vue'
   import PayInfo from './PayInfo.vue'
+  import Confirm from 'lib/components/Confirm.vue'
   export default {
     data: function () {
       return {
@@ -59,6 +60,22 @@
       return error.setOnErrorVm(this)
     },
     computed: {
+      content () {
+        return `
+            <table class="ui celled striped unstackable table">
+              <thead>
+                <tr>
+                  <th>
+                    <i class="user icon"></i>${ this.selected_card.name }
+                  </th>
+                  <th>
+                    <i class="payment icon"></i>${ this.selected_card.card_number }
+                  </th>
+                </tr>
+              </thead>
+            </table>
+          `
+      },
       selected_card () {
         return store.state.selected_card
       }

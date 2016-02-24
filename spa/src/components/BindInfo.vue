@@ -9,9 +9,6 @@
     <thead>
       <tr>
         <th>
-          选择
-        </th>
-        <th>
           <i class="user icon"></i>持卡人
         </th>
         <th>
@@ -22,10 +19,12 @@
     <tbody>
       <tr v-for="card in cards">
         <td>
-          <input v-model="selected_card_number" @click="selectCard(card)" :value="card.card_number" type="radio" name="fruit" tabindex="0" class="hidden">
-        </td>
-        <td>
-          {{card.name}}
+          <div class="field">
+            <div class="ui radio checkbox">
+              <input v-model="selected_card_number" @click="selectCard(card)" :value="card.card_number" type="radio" name="card_number">
+              <label>{{card.name}}</label>
+            </div>
+          </div>
         </td>
         <td>{{card.card_number}}</td>
       </tr>

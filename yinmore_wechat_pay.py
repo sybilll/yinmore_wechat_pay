@@ -41,7 +41,7 @@ from xml2json import xml2json
 OK = '0'
 
 OPENID = 'oGXiIwHwx_zB8ekXibYjdt3Xb_fE'
-OPENID = None
+#OPENID = None
 
 
 class api_wexin_prepay(BaseHandler):
@@ -122,17 +122,15 @@ class api_card(BaseHandler):
         self.write(json.dumps({'error': '0'}, cls=public_bz.ExtEncoder))
 
     @tornado_bz.handleError
-    def delete(self):
+    def delete(self, id):
         self.set_header("Content-Type", "application/json")
-        parm = json.loads(self.request.body)
-        id = parm['id']
         openid = self.get_secure_cookie("openid")
         if OPENID:
             openid = OPENID
         where = " id=%s and openid='%s' " % (id, openid)
-        count = pg.update('bind_card_info', where=where, **parm)
+        count = pg.update('bind_card_info', where=where, is_delete=1)
         if count != 1:
-            raise Exception("更新失败，更新记录 %s 条" % count)
+            raise Exception("删除失败，删除记录 %s 条" % count)
         self.write(json.dumps({'error': '0'}, cls=public_bz.ExtEncoder))
 
 
