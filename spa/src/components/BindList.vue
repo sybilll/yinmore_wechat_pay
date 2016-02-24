@@ -1,6 +1,7 @@
 <style lang="less">
   .remove.icon {
     color:red;
+    font-size:1.5em;
   }
   img {
     width: 100%;
@@ -9,6 +10,12 @@
 
 <template>
   <div>
+    <div class='ui center aligned basic segment'>
+      <button @click='add' v-bind:class="{ 'disabled': loading, 'loading': loading }" class='ui orange basic button'>
+        <i class='icon add'></i>
+        添加
+      </button>
+    </div>
     <table class="ui celled striped unstackable table">
       <thead>
         <tr>
@@ -56,19 +63,19 @@
     computed: {
       content () {
         return `
-            <table class="ui celled striped unstackable table">
-              <thead>
-                <tr>
-                  <th>
-                    <i class="user icon"></i>${ this.remove_card.name }
-                  </th>
-                  <th>
-                    <i class="payment icon"></i>${ this.remove_card.card_number }
-                  </th>
-                </tr>
-              </thead>
-            </table>
-          `
+        <table class="ui celled striped unstackable table">
+        <thead>
+        <tr>
+        <th>
+        <i class="user icon"></i>${ this.remove_card.name }
+        </th>
+        <th>
+        <i class="payment icon"></i>${ this.remove_card.card_number }
+        </th>
+        </tr>
+        </thead>
+        </table>
+        `
       },
       selected_card_number () {
         return store.state.selected_card.card_number
@@ -83,9 +90,13 @@
       }
 
       error.setOnErrorVm(this)
-      store.actions.queryCards()
+      store.actions.queryCards('bind-list')
     },
     methods: {
+      add: function () {
+        store.actions.clearCardDetail()
+        this.$router.go({ name: 'BindCard'})
+      },
       showConfirm: function (card) {
         this.remove_card = card
         // $('#confirm') .modal('show')

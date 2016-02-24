@@ -15,6 +15,7 @@ var api_wexin_prepay = Vue.resource('/api_wexin_prepay{/parm}')
 // var record_resource = Vue.resource('/api_update_last{/parm}')
 
 export default {
+  clearCardDetail: 'CLEAR_CARD_DETAIL',
   setLoading: 'SET_LOADING',
   unbindCard: ({ dispatch, state, actions }, id) => {
     let api_card = Vue.resource(`/api_card/${id}`)
@@ -26,6 +27,22 @@ export default {
           throw new Error(response.data.error)
         } else {
           actions.queryCards()
+        }
+      },
+      function (response) {
+      }
+    )
+  },
+  bindCard: ({ dispatch, state }, parm) => {
+    parm = JSON.stringify(parm)
+    api_card.save(parm).then(
+      function (response) {
+        dispatch('SET_LOADING', false)
+        if (response.data.error !== '0') {
+          toast.error(response.data.error)
+          throw new Error(response.data.error)
+        } else {
+          window.router.go({ path: '/BindList'})
         }
       },
       function (response) {
@@ -73,7 +90,7 @@ export default {
                 // _.delay(window.recharge_info.getPayInfos, 3000)
                 _.delay(actions.queryPayInfos, 3000)
               } else {
-                alert(res.err_code + res.err_desc)
+                // alert(res.err_code + res.err_desc)
                 console.log(res.err_code + res.err_desc)
               }
             }
@@ -118,7 +135,7 @@ export default {
       }
     )
   },
-  queryCards: ({ dispatch, state }) => {
+  queryCards: ({ dispatch, state }, page = '') => {
     api_card.get().then(
       function (response) {
         if (response.data.error !== '0') {
@@ -126,6 +143,10 @@ export default {
           throw new Error(response.data.error)
         }
         if (response.data.cards.length === 0) {
+          if (page === 'bind-list') { // 如果是在绑定页面没查到数据，直接要求填写绑定信息
+            window.router.go({ path: '/BindCard'})
+            return
+          }
           dispatch('SHOW_CARD_NO_BIND_WARING')
         } else {
           dispatch('SET_CARDS', response.data.cards)

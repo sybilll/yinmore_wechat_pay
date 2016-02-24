@@ -2,6 +2,9 @@
 // import Vue from 'vue'
 import $ from 'jquery'
 export default {
+  CLEAR_CARD_DETAIL (state, loading) {
+    state.card_detail = {}
+  },
   SET_LOADING (state, loading) {
     state.loading = loading
   },

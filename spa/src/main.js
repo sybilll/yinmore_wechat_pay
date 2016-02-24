@@ -25,6 +25,7 @@ router.map(
   {
     '/Recharge/': { name: 'Recharge', component: Recharge }, // 为了匹配微信支付url验证，必须以/结尾 !!! 这里设置的最后的/会被取消，只有手工设了
     '/CardDetail/:id': {name: 'CardDetail', component: CardDetail },
+    '/BindCard': {name: 'BindCard', component: CardDetail },
     '/BindList': {name: 'BindList', component: BindList }
   }
 )

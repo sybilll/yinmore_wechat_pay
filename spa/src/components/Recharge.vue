@@ -22,7 +22,7 @@
         </div>
       </form>
       <div class='ui center aligned basic segment'>
-        <button @click='pay' v-bind:class="{ 'disabled': loading, 'loading': loading }" class='ui orange basic button'>
+        <button @click='showConfirm' v-bind:class="{ 'disabled': loading, 'loading': loading }" class='ui orange basic button'>
           <i class='yen icon'></i>
           充值
         </button>
@@ -48,7 +48,7 @@
   export default {
     data: function () {
       return {
-        total_fee: 0,
+        total_fee: null,
         total_fee_error: false
       }
     },

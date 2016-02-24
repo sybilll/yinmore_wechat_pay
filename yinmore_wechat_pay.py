@@ -41,7 +41,7 @@ from xml2json import xml2json
 OK = '0'
 
 OPENID = 'oGXiIwHwx_zB8ekXibYjdt3Xb_fE'
-#OPENID = None
+OPENID = None
 
 
 class api_wexin_prepay(BaseHandler):
@@ -88,6 +88,16 @@ class api_pay(BaseHandler):
 
 
 class api_card(BaseHandler):
+    @tornado_bz.handleError
+    def post(self):
+        self.set_header("Content-Type", "application/json")
+        parm = json.loads(self.request.body)
+        openid = self.get_secure_cookie("openid")
+        if OPENID:
+            openid = OPENID
+        parm['openid'] = openid
+        pg.insert('bind_card_info', **parm)
+        self.write(json.dumps({'error': '0'}, cls=public_bz.ExtEncoder))
 
     @tornado_bz.handleError
     def get(self, parm=None):
