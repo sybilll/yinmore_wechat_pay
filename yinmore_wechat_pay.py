@@ -321,7 +321,7 @@ class subscribe(BaseHandler):
         #openid = self.get_secure_cookie("openid")
         # wechat_oper.addWechatUser(openid)
         # print openid
-        self.redirect('/app/#!/Recharge')
+        self.redirect('/app/#!/Recharge/')
         # self.render(tornado_bz.getTName(self))
 
 
