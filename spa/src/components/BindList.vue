@@ -35,7 +35,7 @@
       <i @click="jump" class="close icon"></i>
       <img src="/static/images/warning.png">
     </div>
-    <confirm header="是否与该油卡解绑？" :content="content" :call_back="unbind">
+    <confirm header="是否与该油卡解绑？" :content="content" :call_back="unbind"></confirm>
   </div>
 </template>
 

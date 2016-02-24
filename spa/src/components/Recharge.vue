@@ -29,7 +29,7 @@
       </div>
     </div>
     <pay-info></pay-info>
-    <confirm header="确定向该油卡充值？" :content="content">
+    <confirm :header="header" :content="content" :call_back="pay"></confirm>
   </div>
 </template>
 
@@ -48,11 +48,12 @@
   export default {
     data: function () {
       return {
-        total_fee: null,
+        total_fee: 0,
         total_fee_error: false
       }
     },
     components: {
+      Confirm,
       BindInfo,
       PayInfo
     },
@@ -60,6 +61,9 @@
       return error.setOnErrorVm(this)
     },
     computed: {
+      header () {
+        return `确定向该油卡充值${this.total_fee}元？`
+      },
       content () {
         return `
             <table class="ui celled striped unstackable table">
@@ -81,12 +85,14 @@
       }
     },
     methods: {
+      showConfirm: function (card) {
+        this.$broadcast('confirm')
+      },
       setAndPay: function (fee) {
         this.total_fee = fee
-        return this.pay()
+        return this.showConfirm()
       },
       pay: function () {
-        var parm
         this.loading = true
         if (!this.total_fee) {
           this.total_fee_error = true
@@ -101,7 +107,7 @@
         if (!store.state.selected_card.card_number) {
           throw new Error('没有取到充值卡号，请刷新页面')
         }
-        parm = {
+        var parm = {
           total_fee: this.total_fee * 100,
           card_number: store.state.selected_card.card_number
         }
