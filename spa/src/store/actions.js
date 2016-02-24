@@ -4,6 +4,8 @@ import VueResource from 'vue-resource'
 import _ from 'underscore'
 Vue.use(VueResource)
 
+var toast = require('lib/functions/toast.coffee').getTopRightToast()
+
 var api_card = Vue.resource('/api_card{/parm}')
 var api_pay = Vue.resource('/api_pay{/parm}')
 var api_wexin_prepay = Vue.resource('/api_wexin_prepay{/parm}')
@@ -20,6 +22,7 @@ export default {
       function (response) {
         dispatch('SET_LOADING', false)
         if (response.data.error !== '0') {
+          toast.error(response.data.error)
           throw new Error(response.data.error)
         } else {
           actions.queryCards()
@@ -35,6 +38,7 @@ export default {
       function (response) {
         dispatch('SET_LOADING', false)
         if (response.data.error !== '0') {
+          toast.error(response.data.error)
           throw new Error(response.data.error)
         } else {
           window.router.go({ path: '/BindList'})
@@ -51,6 +55,7 @@ export default {
       function (response) {
         console.log(response.data)
         if (response.data.error !== '0') {
+          toast.error(response.data.error)
           throw new Error(response.data.error)
         } else {
           var prepay = response.data.prepay
@@ -96,6 +101,7 @@ export default {
     api_card.get(parm).then(
       function (response) {
         if (response.data.cards.length === 0) {
+          toast.error(response.data.error)
           throw new Error('没有查到数据')
         } else {
           dispatch('SET_CARD_DETAIL', response.data.cards[0])
@@ -108,6 +114,10 @@ export default {
   queryCards: ({ dispatch, state }) => {
     api_card.get().then(
       function (response) {
+        if (response.data.error !== '0') {
+          toast.error(response.data.error)
+          throw new Error(response.data.error)
+        }
         if (response.data.cards.length === 0) {
           dispatch('SHOW_CARD_NO_BIND_WARING')
         } else {

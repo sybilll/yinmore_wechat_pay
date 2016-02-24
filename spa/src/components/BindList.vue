@@ -55,7 +55,7 @@
     },
     computed: {
       content () {
-         return `
+        return `
             <table class="ui celled striped unstackable table">
               <thead>
                 <tr>
@@ -68,7 +68,7 @@
                 </tr>
               </thead>
             </table>
-        `
+          `
       },
       selected_card_number () {
         return store.state.selected_card.card_number

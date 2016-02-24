@@ -41,7 +41,7 @@ from xml2json import xml2json
 OK = '0'
 
 OPENID = 'oGXiIwHwx_zB8ekXibYjdt3Xb_fE'
-OPENID = None
+#OPENID = None
 
 
 class api_wexin_prepay(BaseHandler):
@@ -101,6 +101,8 @@ class api_card(BaseHandler):
         openid = self.get_secure_cookie("openid")
         if OPENID:
             openid = OPENID
+        if openid is None:
+            raise Exception('微信后台出错，请关闭页面重新打开')
         cards = public_db.getCardinfos(openid=openid, id=id)
 
         self.write(json.dumps({'error': '0', 'cards': cards}, cls=public_bz.ExtEncoder))
