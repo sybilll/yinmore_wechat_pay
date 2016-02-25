@@ -39,7 +39,7 @@ export default {
           toast.error(response.data.error)
           throw new Error(response.data.error)
         }
-          dispatch('SET_AVAILABLE_CARD_NUMBERS', response.data.available_card_numbers)
+        dispatch('SET_AVAILABLE_CARD_NUMBERS', response.data.available_card_numbers)
       },
       function (response) {
       }

@@ -4,10 +4,8 @@
 import json
 import public_bz
 import sys
-import db_bz
 import wechat_bz
 
-#import db_bz
 import tornado.ioloop
 import tornado.web
 import tornado_bz
@@ -42,7 +40,9 @@ from xml2json import xml2json
 OK = '0'
 
 OPENID = 'oGXiIwHwx_zB8ekXibYjdt3Xb_fE'
-#OPENID = None
+OPENID = None
+
+
 class api_import_cards(BaseHandler):
 
     '''
@@ -59,7 +59,6 @@ class api_import_cards(BaseHandler):
             raise Exception("删除失败，删除记录 %s 条" % count)
         self.write(json.dumps({'error': '0'}, cls=public_bz.ExtEncoder))
 
-
     @tornado_bz.handleError
     @tornado_bz.mustLoginApi
     def get(self):
@@ -73,12 +72,11 @@ class api_import_cards(BaseHandler):
     def post(self):
         self.set_header("Content-Type", "application/json")
         user_id = self.get_secure_cookie("user_id")
-        for card_number  in self.request.body.splitlines():
-            print 'card_number:',card_number
-            values = {'user_id': user_id, 'card_number':card_number}
+        for card_number in self.request.body.splitlines():
+            print 'card_number:', card_number
+            values = {'user_id': user_id, 'card_number': card_number}
             id = db_bz.insertIfNotExist(pg, 'available_card_numbers', values, where=" card_number='%s'" % card_number)
-            print 'insert ',values,'id:',id
-
+            print 'insert ', values, 'id:', id
 
         self.write(json.dumps({'error': '0'}, cls=public_bz.ExtEncoder))
 
@@ -127,6 +125,7 @@ class api_pay(BaseHandler):
 
 
 class api_card(BaseHandler):
+
     @tornado_bz.handleError
     def post(self):
         self.set_header("Content-Type", "application/json")

@@ -37,8 +37,6 @@
 </template>
 
 <script>
-  var error = require('lib/functions/error.coffee')
-
   import store from '../store'
   import Confirm from 'lib/components/Confirm.vue'
   export default {
