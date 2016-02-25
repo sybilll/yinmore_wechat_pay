@@ -18,6 +18,7 @@ from tornado_bz import BaseHandler
 #import oper
 import pg
 import public_db
+import db_bz
 #import proxy
 import web_bz
 from wechat_pay import WeiXinPay
@@ -41,7 +42,42 @@ from xml2json import xml2json
 OK = '0'
 
 OPENID = 'oGXiIwHwx_zB8ekXibYjdt3Xb_fE'
-OPENID = None
+#OPENID = None
+class api_import_cards(BaseHandler):
+
+    '''
+    导入油卡相关
+    '''
+    @tornado_bz.handleError
+    def delete(self, id):
+        self.set_header("Content-Type", "application/json")
+        where = " id=%s " % id
+        count = pg.delete('available_card_numbers', where=where)
+        print where
+        if count != 1:
+            raise Exception("删除失败，删除记录 %s 条" % count)
+        self.write(json.dumps({'error': '0'}, cls=public_bz.ExtEncoder))
+
+
+    @tornado_bz.handleError
+    def get(self):
+        self.set_header("Content-Type", "application/json")
+        available_card_numbers = pg.select('available_card_numbers')
+
+        self.write(json.dumps({'error': '0', 'available_card_numbers': available_card_numbers}, cls=public_bz.ExtEncoder))
+
+    @tornado_bz.handleError
+    def post(self):
+        self.set_header("Content-Type", "application/json")
+        user_id = self.get_secure_cookie("user_id")
+        for card_number  in self.request.body.splitlines():
+            print 'card_number:',card_number
+            values = {'user_id': user_id, 'card_number':card_number}
+            id = db_bz.insertIfNotExist(pg, 'available_card_numbers', values, where=" card_number='%s'" % card_number)
+            print 'insert ',values,'id:',id
+
+
+        self.write(json.dumps({'error': '0'}, cls=public_bz.ExtEncoder))
 
 
 class api_wexin_prepay(BaseHandler):
@@ -55,7 +91,7 @@ class api_wexin_prepay(BaseHandler):
         openid = self.get_secure_cookie("openid")
         if OPENID:
             openid = OPENID
-        remote_ip = self.request.remote_ip
+            remote_ip = self.request.remote_ip
 
         data = json.loads(parm)
         total_fee = data['total_fee']
@@ -95,9 +131,9 @@ class api_card(BaseHandler):
         openid = self.get_secure_cookie("openid")
         if OPENID:
             openid = OPENID
-        parm['openid'] = openid
-        pg.insert('bind_card_info', **parm)
-        self.write(json.dumps({'error': '0'}, cls=public_bz.ExtEncoder))
+            parm['openid'] = openid
+            pg.insert('bind_card_info', **parm)
+            self.write(json.dumps({'error': '0'}, cls=public_bz.ExtEncoder))
 
     @tornado_bz.handleError
     def get(self, parm=None):
@@ -111,8 +147,8 @@ class api_card(BaseHandler):
         openid = self.get_secure_cookie("openid")
         if OPENID:
             openid = OPENID
-        if openid is None:
-            raise Exception('微信后台出错，请关闭页面重新打开')
+            if openid is None:
+                raise Exception('微信后台出错，请关闭页面重新打开')
         cards = public_db.getCardinfos(openid=openid, id=id)
 
         self.write(json.dumps({'error': '0', 'cards': cards}, cls=public_bz.ExtEncoder))
@@ -125,10 +161,10 @@ class api_card(BaseHandler):
         openid = self.get_secure_cookie("openid")
         if OPENID:
             openid = OPENID
-        where = " id=%s and openid='%s' " % (id, openid)
-        count = pg.update('bind_card_info', where=where, **parm)
-        if count != 1:
-            raise Exception("更新失败，更新记录 %s 条" % count)
+            where = " id=%s and openid='%s' " % (id, openid)
+            count = pg.update('bind_card_info', where=where, **parm)
+            if count != 1:
+                raise Exception("更新失败，更新记录 %s 条" % count)
         self.write(json.dumps({'error': '0'}, cls=public_bz.ExtEncoder))
 
     @tornado_bz.handleError
@@ -137,17 +173,17 @@ class api_card(BaseHandler):
         openid = self.get_secure_cookie("openid")
         if OPENID:
             openid = OPENID
-        where = " id=%s and openid='%s' " % (id, openid)
-        count = pg.update('bind_card_info', where=where, is_delete=1)
-        if count != 1:
-            raise Exception("删除失败，删除记录 %s 条" % count)
+            where = " id=%s and openid='%s' " % (id, openid)
+            count = pg.update('bind_card_info', where=where, is_delete=1)
+            if count != 1:
+                raise Exception("删除失败，删除记录 %s 条" % count)
         self.write(json.dumps({'error': '0'}, cls=public_bz.ExtEncoder))
 
 
 class pay(BaseHandler):
 
     '''
-     后台管理查支付信息
+    后台管理查支付信息
     '''
     @tornado_bz.mustLogin
     @tornado_bz.handleError
@@ -242,12 +278,12 @@ class payDone(BaseHandler):
                 wechat.send_text_message(openid, content)
         else:
             print data['return_msg']
-#{u'openid': u'oGXiIwHwx_zB8ekXibYjdt3Xb_fE', u'trade_type': u'JSAPI', u'cash_fee': u'1', u'nonce_str': u'798243e4902342c83e833c71141385f', u'return_code': u'SUCCESS', u'is_subscribe': u'Y', u'bank_type': u'CFT', u'mch_id': u'1308443701', u'out_trade_no': u'86', u'result_code': u'SUCCESS', u'total_fee': u'1', u'appid': u'wx907d8a3f50de65db', u'fee_type': u'CNY', u'time_end': u'20160215113326', u'transaction_id': u'1002230516201602153283628055', u'sign': u'CAD12073F45232BB600B8F066B434A30'}
+            #{u'openid': u'oGXiIwHwx_zB8ekXibYjdt3Xb_fE', u'trade_type': u'JSAPI', u'cash_fee': u'1', u'nonce_str': u'798243e4902342c83e833c71141385f', u'return_code': u'SUCCESS', u'is_subscribe': u'Y', u'bank_type': u'CFT', u'mch_id': u'1308443701', u'out_trade_no': u'86', u'result_code': u'SUCCESS', u'total_fee': u'1', u'appid': u'wx907d8a3f50de65db', u'fee_type': u'CNY', u'time_end': u'20160215113326', u'transaction_id': u'1002230516201602153283628055', u'sign': u'CAD12073F45232BB600B8F066B434A30'}
 
         success = '''
         <xml>
-          <return_code><![CDATA[SUCCESS]]></return_code>
-          <return_msg><![CDATA[OK]]></return_msg>
+        <return_code><![CDATA[SUCCESS]]></return_code>
+        <return_msg><![CDATA[OK]]></return_msg>
         </xml>
         '''
         self.write(success)
@@ -287,11 +323,11 @@ class get_wechat_bind_info(BaseHandler):
         openid = self.get_secure_cookie("openid")
         if OPENID:
             openid = OPENID
-        bind_info = public_db.getBindInfoByOpenid(openid)
-        if bind_info:
-            bind_info = bind_info[0]
-        else:
-            bind_info = None
+            bind_info = public_db.getBindInfoByOpenid(openid)
+            if bind_info:
+                bind_info = bind_info[0]
+            else:
+                bind_info = None
 
         self.write(json.dumps({'error': '0', 'data': bind_info}, cls=public_bz.ExtEncoder))
 
@@ -371,16 +407,16 @@ class callback(BaseHandler):
             def done(response):
                 with open("static/upload/images/" + message.media_id + '.jpg', "w") as f:
                     f.write(response.body)
-                print "DONE"
-            downloadImageFile()
-            # 检查用户是否存储了,没有的话存之
-            wechat_user_info = public_db.getWechatUserByOpenid(message.source)
-            if wechat_user_info:
-                pass
-            else:
-                wechat_user_info = wechat.get_user_info(message.source)
-                pg.db.insert('wechat_user', **wechat_user_info)
-            pg.db.insert('upload_info', openid=message.source, media_id=message.media_id)
+                    print "DONE"
+                    downloadImageFile()
+                    # 检查用户是否存储了,没有的话存之
+                    wechat_user_info = public_db.getWechatUserByOpenid(message.source)
+                    if wechat_user_info:
+                        pass
+                    else:
+                        wechat_user_info = wechat.get_user_info(message.source)
+                        pg.db.insert('wechat_user', **wechat_user_info)
+                        pg.db.insert('upload_info', openid=message.source, media_id=message.media_id)
 
             response = wechat.response_text(content=u'图片已经保存,请继续向我们发送对图片的描述')
         elif isinstance(message, VideoMessage):
@@ -421,7 +457,7 @@ if __name__ == "__main__":
         port = int(sys.argv[1])
     else:
         port = 9000
-    print port
+        print port
 
     url_map = tornado_bz.getURLMap(web_class)
     # 机器人

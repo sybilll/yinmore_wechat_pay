@@ -20,11 +20,11 @@ window.router = router
 import Recharge from './components/Recharge.vue'
 import BindList from './components/BindList.vue'
 import CardDetail from './components/CardDetail.vue'
-import ImportAvailableCardNumber from './components/ImportAvailableCardNumber.vue'
+import ImportAvailableCardNumbers from './components/ImportAvailableCardNumbers.vue'
 
 router.map(
   {
-    '/ImportAvailableCardNumber': {name: 'ImportAvailableCardNumber', component: ImportAvailableCardNumber }, // 录入可用的油卡号
+    '/ImportAvailableCardNumbers': {name: 'ImportAvailableCardNumbers', component: ImportAvailableCardNumbers }, // 录入可用的油卡号
     '/Recharge/': { name: 'Recharge', component: Recharge }, // 为了匹配微信支付url验证，必须以/结尾 !!! 这里设置的最后的/会被取消，只有手工设了
     '/CardDetail/:id': {name: 'CardDetail', component: CardDetail },
     '/BindCard': {name: 'BindCard', component: CardDetail },

@@ -22,6 +22,13 @@ with open('conf/db.ini', 'r') as cfg_file:
     user = config.get('db', 'user')
     pw = config.get('db', 'pw')
 
+class available_card_numbers(model_oper_bz.base):
+
+    '''
+    create by bigzhu at 16/02/25 10:50:26 记录可以冲值的油卡号
+    '''
+    card_number = TextField(null=True)
+
 
 class wechat_dead_line(model_oper_bz.base):
 
@@ -107,4 +114,4 @@ if __name__ == '__main__':
     #model_oper_bz.dropTable(hits, db_name)
     #model_oper_bz.createTable(hits, db_name)
     #model_oper_bz.createAllTable(globals(), db_name, user=user, password=pw, host=host)
-    model_oper_bz.reCreateTable(model_bz.user_info, db_name, user=user, password=pw, host=host)
+    model_oper_bz.reCreateTable(available_card_numbers, db_name, user=user, password=pw, host=host)

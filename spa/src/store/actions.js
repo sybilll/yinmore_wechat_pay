@@ -9,12 +9,57 @@ var toast = require('lib/functions/toast.coffee').getTopRightToast()
 var api_card = Vue.resource('/api_card{/parm}')
 var api_pay = Vue.resource('/api_pay{/parm}')
 var api_wexin_prepay = Vue.resource('/api_wexin_prepay{/parm}')
+var api_import_cards = Vue.resource('/api_import_cards{/parm}')
 // var user_info_resource = Vue.resource('/api_get_user_info{/parm}')
 // var new_resource = Vue.resource('/api_new{/parm}')
 // var old_resource = Vue.resource('/api_old{/parm}')
 // var record_resource = Vue.resource('/api_update_last{/parm}')
 
 export default {
+  deleteImportCard: ({ dispatch, state, actions }, id) => {
+    let api_import_cards = Vue.resource(`/api_import_cards/${id}`)
+    api_import_cards.delete().then(
+      function (response) {
+        dispatch('SET_LOADING', false)
+        if (response.data.error !== '0') {
+          toast.error(response.data.error)
+          throw new Error(response.data.error)
+        } else {
+          actions.queryAvailableCardNumbers()
+        }
+      },
+      function (response) {
+      }
+    )
+  },
+  queryAvailableCardNumbers: ({ dispatch, state }) => {
+    api_import_cards.get().then(
+      function (response) {
+        if (response.data.error !== '0') {
+          toast.error(response.data.error)
+          throw new Error(response.data.error)
+        }
+          dispatch('SET_AVAILABLE_CARD_NUMBERS', response.data.available_card_numbers)
+      },
+      function (response) {
+      }
+    )
+  },
+  importCardNumbers: ({ dispatch, state, actions }, parm) => {
+    api_import_cards.save(parm).then(
+      function (response) {
+        dispatch('SET_LOADING', false)
+        if (response.data.error !== '0') {
+          toast.error(response.data.error)
+          throw new Error(response.data.error)
+        } else {
+          actions.queryAvailableCardNumbers()
+        }
+      },
+      function (response) {
+      }
+    )
+  },
   clearCardDetail: 'CLEAR_CARD_DETAIL',
   setLoading: 'SET_LOADING',
   unbindCard: ({ dispatch, state, actions }, id) => {
