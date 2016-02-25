@@ -40,7 +40,7 @@ from xml2json import xml2json
 OK = '0'
 
 OPENID = 'oGXiIwHwx_zB8ekXibYjdt3Xb_fE'
-OPENID = None
+#OPENID = None
 
 
 class api_import_cards(BaseHandler):
@@ -131,6 +131,10 @@ class api_card(BaseHandler):
         self.set_header("Content-Type", "application/json")
         parm = json.loads(self.request.body)
         openid = self.get_secure_cookie("openid")
+        card_number = parm['card_number']
+        is_in = pg.select('available_card_numbers', where=" card_number='%s'" % card_number )
+        if not is_in:
+            raise Exception('卡号:%s 不是可以冲值的油卡，请联系英茂客服核实!' % card_number)
         if OPENID:
             openid = OPENID
             parm['openid'] = openid
