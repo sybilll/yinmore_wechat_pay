@@ -203,7 +203,7 @@ class pay(BaseHandler):
             parm = json.loads(parm)
             statuses = parm.get('statuses')
             user_id = parm.get('user_id')
-        if user_id:
+        if user_id: #如果有传user_id过来，表示要限定user_id查询
             user_id = self.get_secure_cookie("user_id")
 
         pay_infos = public_db.getPayInfo(statuses=statuses, user_id=user_id)
@@ -222,6 +222,12 @@ class pay(BaseHandler):
         count = self.pg.update('pay', where="id=%s and status<>'%s' " % (id, status), status=status, user_id=user_id)
         if count != 1:
             raise Exception('占位失败')
+        if status == 'recharged': #完成充值，向微信发送
+            pay_info = public_db.getPayInfo(id=id)[0]
+            wechat = wechat_oper.getWechat()
+            content = ''' %s 元已已成功冲入油卡，可以使用了!''' % (int(pay_info.total_fee) / 100.00)
+            wechat.send_text_message(pay_info.openid, content)
+
         self.write(json.dumps({'error': '0'}, cls=public_bz.ExtEncoder))
 
 
