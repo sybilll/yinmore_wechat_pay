@@ -12,7 +12,7 @@
         <img src="/static/images/header_01.png" />
       </div>
     </header>
-    <router-view class="animated" transition="fade"></router-view>
+    <router-view></router-view>
   </div>
 </template>
 
