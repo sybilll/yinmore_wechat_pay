@@ -49,6 +49,7 @@ class api_import_cards(BaseHandler):
     导入油卡相关
     '''
     @tornado_bz.handleError
+    @tornado_bz.mustLoginApi
     def delete(self, id):
         self.set_header("Content-Type", "application/json")
         where = " id=%s " % id
@@ -60,6 +61,7 @@ class api_import_cards(BaseHandler):
 
 
     @tornado_bz.handleError
+    @tornado_bz.mustLoginApi
     def get(self):
         self.set_header("Content-Type", "application/json")
         available_card_numbers = pg.select('available_card_numbers')
@@ -67,6 +69,7 @@ class api_import_cards(BaseHandler):
         self.write(json.dumps({'error': '0', 'available_card_numbers': available_card_numbers}, cls=public_bz.ExtEncoder))
 
     @tornado_bz.handleError
+    @tornado_bz.mustLoginApi
     def post(self):
         self.set_header("Content-Type", "application/json")
         user_id = self.get_secure_cookie("user_id")
