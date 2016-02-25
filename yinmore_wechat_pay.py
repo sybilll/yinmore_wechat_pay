@@ -267,7 +267,8 @@ class admin(BaseHandler):
 
     @tornado_bz.mustLogin
     def get(self):
-        self.render(tornado_bz.getTName(self))
+        #self.render(tornado_bz.getTName(self))
+        self.redirect('/app/admin.html#!/')
 
 
 class payDone(BaseHandler):

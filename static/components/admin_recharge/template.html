@@ -31,7 +31,7 @@
           <td>{{pay_info.card_number}}</td>
           <td>{{pay_info.total_fee/100}}</td>
           <td>{{ pay_info.date}}</td>
-          <td><a @click="changeStatus(pay_info)" href="javascript:void(0)">{{ status_desc[pay_info.status] }}</a></td>
+          <td><a v-on:click="changeStatus(pay_info)" href="javascript:void(0)">{{ status_desc[pay_info.status] }}</a></td>
         </tr>
       </tbody>
     </table>
@@ -68,7 +68,7 @@
           <td>{{pay_info.card_number}}</td>
           <td>{{pay_info.total_fee/100}}</td>
           <td>{{ pay_info.date}}</td>
-          <td><a @click="changeStatus(pay_info)" href="javascript:void(0)">{{ status_desc[pay_info.status] }}</a></td>
+          <td><a v-on:click="changeStatus(pay_info)" href="javascript:void(0)">{{ status_desc[pay_info.status] }}</a></td>
         </tr>
       </tbody>
     </table> 
@@ -84,7 +84,7 @@
     <p>请核对是否确实向油卡 {{current_recharged.card_number}} 冲入了 (%current_recharged.total_fee/100}}元</p>
   </div>
   <div class="actions">
-    <div @click="updatePay(current_recharged, 'recharged')" class="ui positive right labeled icon button">
+    <div v-on:click="updatePay(current_recharged, 'recharged')" class="ui positive right labeled icon button">
       确定
       <i class="checkmark icon"></i>
     </div>
