@@ -3,7 +3,7 @@
 
 <template>
 
-  <div class='ui center aligned basic segment'>
+  <div class="ui main container">
     <available-card-numbers></available-card-numbers>
     <div class="ui form">
       <div class="field">

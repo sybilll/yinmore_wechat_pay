@@ -27,11 +27,11 @@
       </thead>
       <tbody>
         <tr v-for="pay_info in pay_infos">
-          <td>(%pay_info.id%)</td>
-          <td>(%pay_info.card_number%)</td>
-          <td>(%pay_info.total_fee/100%)</td>
-          <td>(% pay_info.stat_date | moment "M月D日 HH:mm:ss" %)</td>
-          <td><a @click="changeStatus(pay_info)" href="javascript:void(0)">(% status_desc[pay_info.status] %)</a></td>
+          <td>{{pay_info.id}}</td>
+          <td>{{pay_info.card_number}}</td>
+          <td>{{pay_info.total_fee/100}}</td>
+          <td>{{ pay_info.date}}</td>
+          <td><a @click="changeStatus(pay_info)" href="javascript:void(0)">{{ status_desc[pay_info.status] }}</a></td>
         </tr>
       </tbody>
     </table>
@@ -64,11 +64,11 @@
       </thead>
       <tbody>
         <tr v-for="pay_info in pay_info_rechargings">
-          <td>(%pay_info.id%)</td>
-          <td>(%pay_info.card_number%)</td>
-          <td>(%pay_info.total_fee/100%)</td>
-          <td>(% pay_info.stat_date | moment "M月D日 HH:mm:ss" %)</td>
-          <td><a @click="changeStatus(pay_info)" href="javascript:void(0)">(% status_desc[pay_info.status] %)</a></td>
+          <td>{{pay_info.id}}</td>
+          <td>{{pay_info.card_number}}</td>
+          <td>{{pay_info.total_fee/100}}</td>
+          <td>{{ pay_info.date}}</td>
+          <td><a @click="changeStatus(pay_info)" href="javascript:void(0)">{{ status_desc[pay_info.status] }}</a></td>
         </tr>
       </tbody>
     </table> 
@@ -81,7 +81,7 @@
     请仔细核查!
   </div>
   <div class="content">
-    <p>请核对是否确实向油卡 (%current_recharged.card_number%) 冲入了 (%current_recharged.total_fee/100%)元</p>
+    <p>请核对是否确实向油卡 {{current_recharged.card_number}} 冲入了 (%current_recharged.total_fee/100}}元</p>
   </div>
   <div class="actions">
     <div @click="updatePay(current_recharged, 'recharged')" class="ui positive right labeled icon button">

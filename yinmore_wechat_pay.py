@@ -188,7 +188,7 @@ class api_card(BaseHandler):
         self.write(json.dumps({'error': '0'}, cls=public_bz.ExtEncoder))
 
 
-class pay(BaseHandler):
+class api_admin_pay(BaseHandler):
 
     '''
     后台管理查支付信息
@@ -206,7 +206,11 @@ class pay(BaseHandler):
         if user_id: #如果有传user_id过来，表示要限定user_id查询
             user_id = self.get_secure_cookie("user_id")
 
-        pay_infos = public_db.getPayInfo(statuses=statuses, user_id=user_id)
+        pay_infos = list(public_db.getPayInfo(statuses=statuses, user_id=user_id))
+        for pay_info in pay_infos:
+            pay_info['date'] = pay_info.stat_date.strftime("%Y年%m月%d日 %H:%M")
+
+
 
         self.write(json.dumps({'error': '0', 'pay_infos': pay_infos}, cls=public_bz.ExtEncoder))
 
