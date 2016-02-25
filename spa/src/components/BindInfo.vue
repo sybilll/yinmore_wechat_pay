@@ -66,7 +66,7 @@
         store.actions.setSelectedCard(card)
       },
       jump: function () {
-        window.location.hash = '#!/card_manager'
+        this.$router.go({ name: 'BindCard'})
       }
     }
   }
