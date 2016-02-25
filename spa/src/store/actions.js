@@ -84,7 +84,7 @@ export default {
             'signType': prepay.signType,
             'paySign': prepay.paySign
           }
-          WeixinJSBridge.invoke(
+          window.WeixinJSBridge.invoke(
             'getBrandWCPayRequest', weixin_parm, function (res) {
               if (res.err_msg === 'get_brand_wcpay_request:ok') {
                 // _.delay(window.recharge_info.getPayInfos, 3000)

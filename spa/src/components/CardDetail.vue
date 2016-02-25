@@ -77,7 +77,7 @@
     },
     ready: function () {
       error.setOnErrorVm(this)
-      if (!this.$route.params.id) { // 添加页面 
+      if (!this.$route.params.id) { // 添加页面
         this.enable()
       } else {
         store.actions.queryCardDetail(this.$route.params.id)
