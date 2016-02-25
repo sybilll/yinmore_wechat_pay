@@ -39,14 +39,14 @@ options = optparse.Values({"pretty": False})
 from xml2json import xml2json
 OK = '0'
 
-OPENID = 'oGXiIwHwx_zB8ekXibYjdt3Xb_fE'
-OPENID = None
-
 def checkOpenid(openid):
+    OPENID = 'oGXiIwHwx_zB8ekXibYjdt3Xb_fE'
+    OPENID = None
     if OPENID:
         openid = OPENID
     if openid is None:
         raise Exception('微信后台出错，请关闭页面重新打开')
+    return openid
 
 class api_import_cards(BaseHandler):
 
@@ -95,7 +95,7 @@ class api_wexin_prepay(BaseHandler):
     def get(self, parm):
         self.set_header("Content-Type", "application/json")
         openid = self.get_secure_cookie("openid")
-        checkOpenid(openid)
+        openid = checkOpenid(openid)
         remote_ip = self.request.remote_ip
 
         data = json.loads(parm)
@@ -121,7 +121,7 @@ class api_pay(BaseHandler):
     def get(self):
         self.set_header("Content-Type", "application/json")
         openid = self.get_secure_cookie("openid")
-        checkOpenid(openid)
+        openid = checkOpenid(openid)
         pay_infos = public_db.getPayInfo(openid, ['payed', 'recharging', 'recharged'])
 
         for pay_info in pay_infos:
@@ -137,7 +137,8 @@ class api_card(BaseHandler):
         self.set_header("Content-Type", "application/json")
         parm = json.loads(self.request.body)
         openid = self.get_secure_cookie("openid")
-        checkOpenid(openid)
+        openid = checkOpenid(openid)
+        print openid
         card_number = parm['card_number']
         is_in = pg.select('available_card_numbers', where=" card_number='%s'" % card_number )
         if not is_in:
@@ -156,7 +157,8 @@ class api_card(BaseHandler):
             id = parm.get('id')
 
         openid = self.get_secure_cookie("openid")
-        checkOpenid(openid)
+        openid = checkOpenid(openid)
+        print openid
         cards = public_db.getCardinfos(openid=openid, id=id)
 
         self.write(json.dumps({'error': '0', 'cards': cards}, cls=public_bz.ExtEncoder))
@@ -167,7 +169,7 @@ class api_card(BaseHandler):
         parm = json.loads(self.request.body)
         id = parm['id']
         openid = self.get_secure_cookie("openid")
-        checkOpenid(openid)
+        openid = checkOpenid(openid)
         where = " id=%s and openid='%s' " % (id, openid)
         count = pg.update('bind_card_info', where=where, **parm)
         if count != 1:
@@ -178,7 +180,7 @@ class api_card(BaseHandler):
     def delete(self, id):
         self.set_header("Content-Type", "application/json")
         openid = self.get_secure_cookie("openid")
-        checkOpenid(openid)
+        openid = checkOpenid(openid)
         where = " id=%s and openid='%s' " % (id, openid)
         count = pg.update('bind_card_info', where=where, is_delete=1)
         if count != 1:
@@ -327,7 +329,7 @@ class get_wechat_bind_info(BaseHandler):
     def post(self):
         self.set_header("Content-Type", "application/json")
         openid = self.get_secure_cookie("openid")
-        checkOpenid(openid)
+        openid = checkOpenid(openid)
         bind_info = public_db.getBindInfoByOpenid(openid)
         if bind_info:
             bind_info = bind_info[0]
