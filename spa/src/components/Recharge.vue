@@ -12,9 +12,9 @@
     <bind-info></bind-info>
     <div class='ui center aligned segment'>
       <h4 class='ui header'>请选择/填入充值金额</h4>
-      <div @click='setAndPay(500)' class='ui yellow button'>500</div>
-      <div @click='setAndPay(1000)' class='ui yellow button'>1000</div>
-      <div @click='setAndPay(5000)' class='ui yellow button'>5000</div>
+      <button @click='setAndPay(500)' class='ui yellow button'>500</button>
+      <button @click='setAndPay(1000)' class='ui yellow button'>1000</button>
+      <button @click='setAndPay(5000)' class='ui yellow button'>5000</button>
       <form class='ui form'>
         <div v-bind:class="{ 'error': total_fee_error }" class='field'>
           <label></label>
