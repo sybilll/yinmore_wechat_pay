@@ -3,7 +3,6 @@
 
 <template>
   <div class="ui center aligned segment">
-    <h4 class="ui header">{{bind_info.name}}</h4>
     <form class="ui form">
       <div v-bind:class="{ 'error': card_number_error }" class="required field">
         <label>加油卡卡号</label>

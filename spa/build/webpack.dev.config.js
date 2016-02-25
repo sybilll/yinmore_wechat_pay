@@ -5,10 +5,10 @@ config.devtool = 'eval-source-map'
 config.devServer = {
     noInfo: true,
     proxy: {
-        "/api_*": "http://localhost:8000",
-        "/login": "http://localhost:8000",
-        "/logout": "http://localhost:8000",
-        "/static/*": "http://localhost:8000"
+        "/api_*": "http://localhost:9000",
+        "/login": "http://localhost:9000",
+        "/logout": "http://localhost:9000",
+        "/static/*": "http://localhost:9000"
     }
 }
 

@@ -34,9 +34,7 @@
 </template>
 
 <script>
-  var error, toast, top_toast
-
-  error = require('lib/functions/error.coffee')
+  var toast, top_toast
 
   toast = require('lib/functions/toast.coffee')
 
@@ -58,7 +56,9 @@
       PayInfo
     },
     ready: function () {
-      return error.setOnErrorVm(this)
+
+      // 改为进入Recharge后，由程序为其加上最后的/,否则微信支付url验证通不过
+      this.addSlash()
     },
     computed: {
       header () {
@@ -66,25 +66,28 @@
       },
       content () {
         return `
-            <table class="ui celled striped unstackable table">
-              <thead>
-                <tr>
-                  <th>
-                    <i class="user icon"></i>${ this.selected_card.name }
-                  </th>
-                  <th>
-                    <i class="payment icon"></i>${ this.selected_card.card_number }
-                  </th>
-                </tr>
-              </thead>
-            </table>
-          `
+        <table class="ui celled striped unstackable table">
+        <thead>
+        <tr>
+        <th>
+        <i class="user icon"></i>${ this.selected_card.name }
+        </th>
+        <th>
+        <i class="payment icon"></i>${ this.selected_card.card_number }
+        </th>
+        </tr>
+        </thead>
+        </table>
+        `
       },
       selected_card () {
         return store.state.selected_card
       }
     },
     methods: {
+      addSlash: function () {
+        window.location.hash = window.location.hash + '/'
+      },
       showConfirm: function (card) {
         this.$broadcast('confirm')
       },

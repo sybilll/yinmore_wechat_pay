@@ -41,7 +41,7 @@ OK = '0'
 
 def checkOpenid(openid):
     OPENID = 'oGXiIwHwx_zB8ekXibYjdt3Xb_fE'
-    OPENID = None
+    #OPENID = None
     if OPENID:
         openid = OPENID
     if openid is None:
