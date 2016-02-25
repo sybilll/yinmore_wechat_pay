@@ -42,6 +42,11 @@ OK = '0'
 OPENID = 'oGXiIwHwx_zB8ekXibYjdt3Xb_fE'
 OPENID = None
 
+def checkOpenid(openid):
+    if OPENID:
+        openid = OPENID
+    if openid is None:
+        raise Exception('微信后台出错，请关闭页面重新打开')
 
 class api_import_cards(BaseHandler):
 
@@ -90,9 +95,8 @@ class api_wexin_prepay(BaseHandler):
     def get(self, parm):
         self.set_header("Content-Type", "application/json")
         openid = self.get_secure_cookie("openid")
-        if OPENID:
-            openid = OPENID
-            remote_ip = self.request.remote_ip
+        checkOpenid(openid)
+        remote_ip = self.request.remote_ip
 
         data = json.loads(parm)
         total_fee = data['total_fee']
@@ -117,7 +121,9 @@ class api_pay(BaseHandler):
     def get(self):
         self.set_header("Content-Type", "application/json")
         openid = self.get_secure_cookie("openid")
+        checkOpenid(openid)
         pay_infos = public_db.getPayInfo(openid, ['payed', 'recharging', 'recharged'])
+
         for pay_info in pay_infos:
             pay_info['date'] = pay_info.stat_date.strftime("%m-%d %H:%M")
 
@@ -131,15 +137,14 @@ class api_card(BaseHandler):
         self.set_header("Content-Type", "application/json")
         parm = json.loads(self.request.body)
         openid = self.get_secure_cookie("openid")
+        checkOpenid(openid)
         card_number = parm['card_number']
         is_in = pg.select('available_card_numbers', where=" card_number='%s'" % card_number )
         if not is_in:
             raise Exception('卡号:%s 不是可以冲值的油卡，请联系英茂客服核实!' % card_number)
-        if OPENID:
-            openid = OPENID
-            parm['openid'] = openid
-            pg.insert('bind_card_info', **parm)
-            self.write(json.dumps({'error': '0'}, cls=public_bz.ExtEncoder))
+        parm['openid'] = openid
+        pg.insert('bind_card_info', **parm)
+        self.write(json.dumps({'error': '0'}, cls=public_bz.ExtEncoder))
 
     @tornado_bz.handleError
     def get(self, parm=None):
@@ -151,10 +156,7 @@ class api_card(BaseHandler):
             id = parm.get('id')
 
         openid = self.get_secure_cookie("openid")
-        if OPENID:
-            openid = OPENID
-            if openid is None:
-                raise Exception('微信后台出错，请关闭页面重新打开')
+        checkOpenid(openid)
         cards = public_db.getCardinfos(openid=openid, id=id)
 
         self.write(json.dumps({'error': '0', 'cards': cards}, cls=public_bz.ExtEncoder))
@@ -165,24 +167,22 @@ class api_card(BaseHandler):
         parm = json.loads(self.request.body)
         id = parm['id']
         openid = self.get_secure_cookie("openid")
-        if OPENID:
-            openid = OPENID
-            where = " id=%s and openid='%s' " % (id, openid)
-            count = pg.update('bind_card_info', where=where, **parm)
-            if count != 1:
-                raise Exception("更新失败，更新记录 %s 条" % count)
+        checkOpenid(openid)
+        where = " id=%s and openid='%s' " % (id, openid)
+        count = pg.update('bind_card_info', where=where, **parm)
+        if count != 1:
+            raise Exception("更新失败，更新记录 %s 条" % count)
         self.write(json.dumps({'error': '0'}, cls=public_bz.ExtEncoder))
 
     @tornado_bz.handleError
     def delete(self, id):
         self.set_header("Content-Type", "application/json")
         openid = self.get_secure_cookie("openid")
-        if OPENID:
-            openid = OPENID
-            where = " id=%s and openid='%s' " % (id, openid)
-            count = pg.update('bind_card_info', where=where, is_delete=1)
-            if count != 1:
-                raise Exception("删除失败，删除记录 %s 条" % count)
+        checkOpenid(openid)
+        where = " id=%s and openid='%s' " % (id, openid)
+        count = pg.update('bind_card_info', where=where, is_delete=1)
+        if count != 1:
+            raise Exception("删除失败，删除记录 %s 条" % count)
         self.write(json.dumps({'error': '0'}, cls=public_bz.ExtEncoder))
 
 
@@ -201,8 +201,8 @@ class pay(BaseHandler):
             parm = json.loads(parm)
             statuses = parm.get('statuses')
             user_id = parm.get('user_id')
-            if user_id:
-                user_id = self.get_secure_cookie("user_id")
+        if user_id:
+            user_id = self.get_secure_cookie("user_id")
 
         pay_infos = public_db.getPayInfo(statuses=statuses, user_id=user_id)
 
@@ -327,13 +327,12 @@ class get_wechat_bind_info(BaseHandler):
     def post(self):
         self.set_header("Content-Type", "application/json")
         openid = self.get_secure_cookie("openid")
-        if OPENID:
-            openid = OPENID
-            bind_info = public_db.getBindInfoByOpenid(openid)
-            if bind_info:
-                bind_info = bind_info[0]
-            else:
-                bind_info = None
+        checkOpenid(openid)
+        bind_info = public_db.getBindInfoByOpenid(openid)
+        if bind_info:
+            bind_info = bind_info[0]
+        else:
+            bind_info = None
 
         self.write(json.dumps({'error': '0', 'data': bind_info}, cls=public_bz.ExtEncoder))
 
