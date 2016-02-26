@@ -39,14 +39,16 @@ options = optparse.Values({"pretty": False})
 from xml2json import xml2json
 OK = '0'
 
+
 def checkOpenid(openid):
     OPENID = 'oGXiIwHwx_zB8ekXibYjdt3Xb_fE'
-    #OPENID = None
+    OPENID = None
     if OPENID:
         openid = OPENID
     if openid is None:
         raise Exception('微信后台出错，请关闭页面重新打开')
     return openid
+
 
 class api_import_cards(BaseHandler):
 
@@ -140,7 +142,7 @@ class api_card(BaseHandler):
         openid = checkOpenid(openid)
         print openid
         card_number = parm['card_number']
-        is_in = pg.select('available_card_numbers', where=" card_number='%s'" % card_number )
+        is_in = pg.select('available_card_numbers', where=" card_number='%s'" % card_number)
         if not is_in:
             raise Exception('卡号:%s 不是可以冲值的油卡，请联系英茂客服核实!' % card_number)
         parm['openid'] = openid
@@ -203,14 +205,12 @@ class api_admin_pay(BaseHandler):
             parm = json.loads(parm)
             statuses = parm.get('statuses')
             user_id = parm.get('user_id')
-        if user_id: #如果有传user_id过来，表示要限定user_id查询
+        if user_id:  # 如果有传user_id过来，表示要限定user_id查询
             user_id = self.get_secure_cookie("user_id")
 
         pay_infos = list(public_db.getPayInfo(statuses=statuses, user_id=user_id))
         for pay_info in pay_infos:
             pay_info['date'] = pay_info.stat_date.strftime("%Y年%m月%d日 %H:%M")
-
-
 
         self.write(json.dumps({'error': '0', 'pay_infos': pay_infos}, cls=public_bz.ExtEncoder))
 
@@ -226,7 +226,7 @@ class api_admin_pay(BaseHandler):
         count = self.pg.update('pay', where="id=%s and status<>'%s' " % (id, status), status=status, user_id=user_id)
         if count != 1:
             raise Exception('占位失败')
-        if status == 'recharged': #完成充值，向微信发送
+        if status == 'recharged':  # 完成充值，向微信发送
             pay_info = public_db.getPayInfo(id=id)[0]
             wechat = wechat_oper.getWechat()
             content = ''' %s 元已已成功冲入油卡，可以使用了!''' % (int(pay_info.total_fee) / 100.00)
@@ -267,7 +267,7 @@ class admin(BaseHandler):
 
     @tornado_bz.mustLogin
     def get(self):
-        #self.render(tornado_bz.getTName(self))
+        # self.render(tornado_bz.getTName(self))
         self.redirect('/app/admin.html#!/')
 
 
@@ -383,7 +383,7 @@ class subscribe(BaseHandler):
         #openid = self.get_secure_cookie("openid")
         # wechat_oper.addWechatUser(openid)
         # print openid
-        self.redirect('/app/#!/Recharge/')
+        self.redirect('/app/#!/Recharge')
         # self.render(tornado_bz.getTName(self))
 
 
