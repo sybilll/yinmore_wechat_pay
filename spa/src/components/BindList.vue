@@ -1,6 +1,7 @@
 <style lang="less">
   .remove.icon {
     color:red;
+    font-size:1.5em;
   }
   img {
     width: 100%;
@@ -9,6 +10,12 @@
 
 <template>
   <div>
+    <div class='ui center aligned basic segment'>
+      <button @click='add' v-bind:class="{ 'disabled': loading, 'loading': loading }" class='ui orange basic button'>
+        <i class='icon add'></i>
+        添加
+      </button>
+    </div>
     <table class="ui celled striped unstackable table">
       <thead>
         <tr>
@@ -35,34 +42,7 @@
       <i @click="jump" class="close icon"></i>
       <img src="/static/images/warning.png">
     </div>
-    <div id="confirm" class="ui small test modal transition hidden">
-      <div class="header">
-        是否与该油卡解绑？
-      </div>
-      <div class="content">
-        <table class="ui celled striped unstackable table">
-          <thead>
-            <tr>
-              <th>
-                <i class="user icon"></i>{{remove_card.name}}
-              </th>
-              <th>
-                <i class="payment icon"></i>{{remove_card.card_number}}
-              </th>
-            </tr>
-          </thead>
-        </table>
-      </div>
-      <div class="actions">
-        <div class="ui negative button">
-          取消
-        </div>
-        <div @click="unbind" class="ui positive right labeled icon button">
-          确认
-          <i class="checkmark icon"></i>
-        </div>
-      </div>
-    </div>
+    <confirm header="是否与该油卡解绑？" :content="content" :call_back="unbind"></confirm>
   </div>
 </template>
 
@@ -70,14 +50,33 @@
   var error = require('lib/functions/error.coffee')
 
   import store from '../store'
-  import $ from 'jquery'
+  import Confirm from 'lib/components/Confirm.vue'
   export default {
     data: function () {
       return {
         remove_card: {}
       }
     },
+    components: {
+      Confirm
+    },
     computed: {
+      content () {
+        return `
+        <table class="ui celled striped unstackable table">
+        <thead>
+        <tr>
+        <th>
+        <i class="user icon"></i>${ this.remove_card.name }
+        </th>
+        <th>
+        <i class="payment icon"></i>${ this.remove_card.card_number }
+        </th>
+        </tr>
+        </thead>
+        </table>
+        `
+      },
       selected_card_number () {
         return store.state.selected_card.card_number
       },
@@ -91,12 +90,17 @@
       }
 
       error.setOnErrorVm(this)
-      store.actions.queryCards()
+      store.actions.queryCards('bind-list')
     },
     methods: {
+      add: function () {
+        store.actions.clearCardDetail()
+        this.$router.go({ name: 'BindCard'})
+      },
       showConfirm: function (card) {
         this.remove_card = card
-        $('#confirm') .modal('show')
+        // $('#confirm') .modal('show')
+        this.$broadcast('confirm')
       },
       selectCard: function (card) {
         store.actions.setSelectedCard(card)

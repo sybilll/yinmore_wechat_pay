@@ -19,11 +19,12 @@ module.exports =
   template: require('./template.html')
   ready:->
     error.setOnErrorVm(@)
-    @resource = @$resource('/pay{/parm}')
+    @resource = @$resource('/api_admin_pay{/parm}')
     @getPayInfos()
     @getPayInfosRecharging()
     #抛出到全局去污染
     window.recharge_info = @
+    window.setInterval(@getPayInfos, 10000)
   methods:
     getPayInfos:->
       parm = JSON.stringify

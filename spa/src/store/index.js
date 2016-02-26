@@ -7,6 +7,7 @@ import mutations from './mutations'
 Vue.use(Vuex)
 
 const state = {
+  available_card_numbers: [], // 导入的允许充值的油卡
   loading: false,
   card_detail: {}, // 显示待编辑的详情
   selected_card: {}, // 充值时候选中的油卡

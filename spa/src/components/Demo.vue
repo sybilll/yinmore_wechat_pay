@@ -1,10 +1,4 @@
 <style lang="less">
-  .container {
-    border: 1px solid #00f;
-  }
-  .red {
-    color: #f00;
-  }
 </style>
 
 <template>
@@ -13,10 +7,18 @@
 <script>
   import store from '../store'
   export default {
-    data () {
+    props: [],
+    components: {
     },
-
+    data: function () {
+      return {
+        remove_card: {}
+        card_numbers: ''
+      }
+    },
     ready () {
+    },
+    methods: {
     }
   }
 </script>

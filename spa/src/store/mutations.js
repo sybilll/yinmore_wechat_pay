@@ -2,6 +2,12 @@
 // import Vue from 'vue'
 import $ from 'jquery'
 export default {
+  SET_AVAILABLE_CARD_NUMBERS (state, available_card_numbers) {
+    state.available_card_numbers = available_card_numbers
+  },
+  CLEAR_CARD_DETAIL (state, loading) {
+    state.card_detail = {}
+  },
   SET_LOADING (state, loading) {
     state.loading = loading
   },

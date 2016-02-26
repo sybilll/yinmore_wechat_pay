@@ -3,7 +3,6 @@
 
 <template>
   <div class="ui center aligned segment">
-    <h4 class="ui header">{{bind_info.name}}</h4>
     <form class="ui form">
       <div v-bind:class="{ 'error': card_number_error }" class="required field">
         <label>加油卡卡号</label>
@@ -77,8 +76,12 @@
     },
     ready: function () {
       error.setOnErrorVm(this)
-      store.actions.queryCardDetail(this.$route.params.id)
-      this.disable()
+      if (!this.$route.params.id) { // 添加页面
+        this.enable()
+      } else {
+        store.actions.queryCardDetail(this.$route.params.id)
+        this.disable()
+      }
     },
     methods: {
       enable: function () {
@@ -129,7 +132,12 @@
             name: this.bind_info.name,
             id_number: this.bind_info.id_number
           }
-          store.actions.updateCardDetail(parm)
+          if (!this.bind_info.id) {
+            store.actions.bindCard(parm)
+          } else {
+            parm.id = this.bind_info.id
+            store.actions.updateCardDetail(parm)
+          }
         }
       },
       cleanError: function () {
@@ -140,6 +148,5 @@
         this.loading = false
       }
     }
-
   }
 </script>

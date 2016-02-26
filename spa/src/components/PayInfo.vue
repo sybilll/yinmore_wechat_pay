@@ -27,7 +27,7 @@
         <td>{{pay_info.id}}</td>
         <td>{{pay_info.card_number}}</td>
         <td>{{pay_info.total_fee/100}}</td>
-        <td>{{ pay_info.stat_date | moment "M月D日 HH:mm:ss" }}</td>
+        <td>{{ pay_info.date}}</td>
         <td>{{ status_desc[pay_info.status] }}</td>
       </tr>
     </tbody>
