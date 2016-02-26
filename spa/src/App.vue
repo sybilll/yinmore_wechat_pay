@@ -13,6 +13,7 @@
       </div>
     </header>
     <router-view></router-view>
+    <br>
   </div>
 </template>
 
