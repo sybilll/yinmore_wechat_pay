@@ -1,2 +1,2 @@
 #! /bin/bash
-scp -P 23 ./dist/build.js follow.center:/home/bigzhu/follow_center/spa/dist/
+scp ./dist/build.js 112.74.97.194:/home/bigzhu/yinmore_wechat_pay/spa/dist/

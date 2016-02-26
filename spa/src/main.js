@@ -7,25 +7,25 @@ Vue.use(VueRouter)
 Vue.use(VueMoment)
 
 Vue.config.debug = true
-/* eslint-disable no-new */
-new Vue(
-  {
-    el: '#v_header',
-    data () {
-    },
-    methods: {
-    }
-  }
-)
-
+// Vue.transition('slide', {
+//   enterClass: 'slideInRight',
+//   leaveClass: 'slideOutRight'
+// })
+Vue.transition('slide', {
+  enterClass: 'bounceInRight',
+  leaveClass: 'zoomOutLeft'
+})
 var router = new VueRouter()
+window.router = router
 import Recharge from './components/Recharge.vue'
+import BindList from './components/BindList.vue'
+import CardDetail from './components/CardDetail.vue'
 
 router.map(
   {
-    '/': {
-      component: Recharge
-    }
+    '/Recharge': { name: 'Recharge', component: Recharge },
+    '/CardDetail/:id': {name: 'CardDetail', component: CardDetail },
+    '/BindList': {name: 'BindList', component: BindList }
   }
 )
 router.start(App, '#app')

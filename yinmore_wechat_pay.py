@@ -44,6 +44,33 @@ OPENID = 'oGXiIwHwx_zB8ekXibYjdt3Xb_fE'
 OPENID = None
 
 
+class api_wexin_prepay(BaseHandler):
+
+    '''
+    取得统一下单id
+    '''
+    @tornado_bz.handleError
+    def get(self, parm):
+        self.set_header("Content-Type", "application/json")
+        openid = self.get_secure_cookie("openid")
+        if OPENID:
+            openid = OPENID
+        remote_ip = self.request.remote_ip
+
+        data = json.loads(parm)
+        total_fee = data['total_fee']
+        card_number = data['card_number']
+
+        out_trade_no = pg.db.insert('pay', seqname='pay_id_seq', openid=openid, total_fee=total_fee, card_number=card_number, status='prepay')
+        print 'out_trade_no=', out_trade_no
+
+        weixin_pay = WeiXinPay(out_trade_no=out_trade_no, body='英茂油卡冲值:%s' % total_fee, total_fee=total_fee,
+                               spbill_create_ip=remote_ip, openid=openid)
+
+        prepay = weixin_pay.get_prepay_id()
+        self.write(json.dumps({'error': '0', 'prepay': prepay}, cls=public_bz.ExtEncoder))
+
+
 class api_pay(BaseHandler):
 
     '''
@@ -61,14 +88,48 @@ class api_pay(BaseHandler):
 class api_card(BaseHandler):
 
     @tornado_bz.handleError
-    def get(self):
+    def get(self, parm=None):
         self.set_header("Content-Type", "application/json")
+
+        id = None
+        if parm:
+            parm = json.loads(parm)
+            id = parm.get('id')
+
         openid = self.get_secure_cookie("openid")
         if OPENID:
             openid = OPENID
-        cards = public_db.getBindInfoByOpenid(openid)
+        cards = public_db.getCardinfos(openid=openid, id=id)
 
         self.write(json.dumps({'error': '0', 'cards': cards}, cls=public_bz.ExtEncoder))
+
+    @tornado_bz.handleError
+    def put(self):
+        self.set_header("Content-Type", "application/json")
+        parm = json.loads(self.request.body)
+        id = parm['id']
+        openid = self.get_secure_cookie("openid")
+        if OPENID:
+            openid = OPENID
+        where = " id=%s and openid='%s' " % (id, openid)
+        count = pg.update('bind_card_info', where=where, **parm)
+        if count != 1:
+            raise Exception("更新失败，更新记录 %s 条" % count)
+        self.write(json.dumps({'error': '0'}, cls=public_bz.ExtEncoder))
+
+    @tornado_bz.handleError
+    def delete(self):
+        self.set_header("Content-Type", "application/json")
+        parm = json.loads(self.request.body)
+        id = parm['id']
+        openid = self.get_secure_cookie("openid")
+        if OPENID:
+            openid = OPENID
+        where = " id=%s and openid='%s' " % (id, openid)
+        count = pg.update('bind_card_info', where=where, **parm)
+        if count != 1:
+            raise Exception("更新失败，更新记录 %s 条" % count)
+        self.write(json.dumps({'error': '0'}, cls=public_bz.ExtEncoder))
 
 
 class pay(BaseHandler):
@@ -246,10 +307,10 @@ class set_openid(web_bz.set_openid):
     pass
 
 
-class app(BaseHandler):
+class subscribe(BaseHandler):
 
     '''
-    主程序
+    create by bigzhu at 16/02/23 22:02:51 确定已经登录
     '''
 
     # @wechat_bz.mustSubscribe
@@ -258,7 +319,8 @@ class app(BaseHandler):
         #openid = self.get_secure_cookie("openid")
         # wechat_oper.addWechatUser(openid)
         # print openid
-        self.render(tornado_bz.getTName(self))
+        self.redirect('/app/#!/Recharge')
+        # self.render(tornado_bz.getTName(self))
 
 
 class callback(BaseHandler):
@@ -357,7 +419,7 @@ if __name__ == "__main__":
     # sitemap
     url_map.append((r'/sitemap.xml()', tornado.web.StaticFileHandler, {'path': "./static/sitemap.xml"}))
     #url_map.append((r'/static/(.*)', tornado.web.StaticFileHandler, {'path': "./static"}))
-    url_map.append((r"/(.*)", tornado.web.StaticFileHandler, {"path": "./spa/", "default_filename": "index.html"}))
+    url_map.append((r"/app/(.*)", tornado.web.StaticFileHandler, {"path": "./spa/", "default_filename": "index.html"}))
 
     url_map.append((r'/', admin))
 

@@ -45,6 +45,10 @@ module.exports = {
     }
   },
   externals: {
-    jquery: "jQuery"
+    // vue: 'vue', //73.4kb
+    //vuex: 'vuex', // 56kb
+    //'vue-moment': 'vue-moment', // 177.4kb
+    //underscore: 'underscore'
+    jquery: 'jQuery'
   }
 }

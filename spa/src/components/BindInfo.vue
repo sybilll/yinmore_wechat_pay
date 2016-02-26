@@ -22,7 +22,7 @@
     <tbody>
       <tr v-for="card in cards">
         <td>
-          <input type="radio" name="fruit" checked="" tabindex="0" class="hidden">
+          <input v-model="selected_card_number" @click="selectCard(card)" :value="card.card_number" type="radio" name="fruit" tabindex="0" class="hidden">
         </td>
         <td>
           {{card.name}}
@@ -40,54 +40,34 @@
 <script>
   var error = require('lib/functions/error.coffee')
 
-  import $ from 'jquery'
   import store from '../store'
   export default {
-    props: ['card_number'],
     data: function () {
       return {
-        bind_info: {
-          name: '',
-          card_number: ''
-        }
       }
     },
     computed: {
+      selected_card_number () {
+        return store.state.selected_card.card_number
+      },
       cards () {
         return store.state.cards
       }
     },
     ready: function () {
+      if (Object.keys(store.state.selected_card).length === 0 && store.state.cards.length !== 0) {// 还没选择要充值的
+        this.selectCard(store.state.cards[0])
+      }
+
       error.setOnErrorVm(this)
       store.actions.queryCards()
     },
     methods: {
+      selectCard: function (card) {
+        store.actions.setSelectedCard(card)
+      },
       jump: function () {
         window.location.hash = '#!/card_manager'
-      },
-      getBindInfo: function () {
-        return $.ajax(
-          {
-            url: '/get_wechat_bind_info',
-            type: 'POST',
-            success: (
-              function (_this) {
-                return function (data, status, response) {
-                  if (data.error !== '0') {
-                    throw new Error(data.error)
-                  } else {
-                    if (data.data) {
-                      _this.bind_info = data.data
-                      _this.card_number = _this.bind_info.card_number
-                    } else {
-                      return $('#card_no_bind_waring').modal('show')
-                    }
-                  }
-                }
-              }
-            )(this)
-          }
-        )
       }
     }
   }
